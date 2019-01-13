@@ -11,7 +11,8 @@ function renderNavbar(user) {
   const navbarDiv = document.getElementById('nav-item-container');
 
   navbarDiv.appendChild(newNavbarItem('Home', '/'));
-
+  navbarDiv.appendChild(newNavbarItem('About', '/about'));
+  navbarDiv.appendChild(newNavbarItem('Gallery', '/gallery'));
   if (user._id !== undefined) {
     navbarDiv.appendChild(newNavbarItem('Profile', '/u/profile?'+user._id));
     navbarDiv.appendChild(newNavbarItem('Logout', '/logout'));
