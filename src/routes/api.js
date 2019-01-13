@@ -56,15 +56,13 @@ router.post(
   }
 );
 
-// THEIR CODE --Christina
-/* router.get('/comment', function(req, res) {
+router.get('/comment', function(req, res) {
   Comment.find({ parent: req.query.parent }, function(err, comments) {
     res.send(comments);
   })
-}); */
+});
 
-// THEIR CODE --Christina
-/* router.post(
+router.post(
   '/comment',
   connect.ensureLoggedIn(),
   function(req, res) {
@@ -81,5 +79,5 @@ router.post(
 
     res.send({});
   }
-); */
+);
 module.exports = router;
