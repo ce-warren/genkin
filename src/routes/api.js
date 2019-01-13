@@ -56,11 +56,12 @@ router.post(
   }
 );
 
-router.get('/comment', function(req, res) {
+// THEIR CODE --Christina
+/* router.get('/comment', function(req, res) {
   Comment.find({ parent: req.query.parent }, function(err, comments) {
     res.send(comments);
   })
-});
+}); */
 
 // THEIR CODE --Christina
 /* router.post(
