@@ -16,7 +16,7 @@ router.get('/gallery', function(req, res) {
 });
 
 router.get('/u/user', function(req, res) {
-  if (req.user) {
+  if (req.user !== undefined) {
     res.sendFile('user.html', { root: 'src/views' })
   }
   else {
