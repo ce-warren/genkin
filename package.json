@@ -3,28 +3,24 @@
   "version": "1.0.0",
   "description": "AR Family Trees",
   "main": "app.js",
+  "author": "Christina Warren, Charity Everett, Braina Douglas",
+  "license": "MIT",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon src/app.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mit6148/ce-warren-CharityARtiste-brianadouglas.git"
-  },
-  "author": "Christina Warren, Charity Everett, Briana Douglas",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mit6148/ce-warren-CharityARtiste-brianadouglas/issues"
-  },
-  "homepage": "https://github.com/mit6148/ce-warren-CharityARtiste-brianadouglas#readme",
   "dependencies": {
     "connect-ensure-login": "^0.1.1",
-    "express": "^4.16.4",
+    "cors": "^2.8.4",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.1",
     "express-session": "^1.15.6",
-    "http": "0.0.0",
-    "mongoose": "^5.4.3",
-    "nodemon": "^1.18.9",
+    "mongoose": "^5.0.0",
     "passport": "^0.4.0",
-    "passport-google-oauth": "^1.0.0"
+    "passport-google-oauth": "^1.0.0",
+    "session": "^0.1.0",
+    "socket.io": "^2.0.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.12.1"
   }
 }
