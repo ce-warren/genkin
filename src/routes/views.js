@@ -20,7 +20,7 @@ router.get('/u/user', function(req, res) {
     res.sendFile('user.html', { root: 'src/views' })
   }
   else {
-    res.sendFile('index.html', { root: 'src/views' })
+    res.redirect('/')
   }
   ;
 });
