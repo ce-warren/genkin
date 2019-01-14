@@ -3,32 +3,35 @@ const mongoose = require('mongoose');
 
 // uh tree class data structure? is this how webdev works? -christina
 // importing functions: https://stackoverflow.com/questions/43157936/javascript-import-function-syntax (for later)
-function Tree () {
-  this.names = [];
-  this.child;
-  this.mediaDict = {}
+class Tree {
+  constructor () {
+    this.names = [];
+    this.child;
+    this.mediaDict = {}
+  }
 
-  this.addName = function(name) {
+  addName(name) {
     this.names.append(name);
-  };
+  }
 
-  this.removeName = function(name) {
+  removeName(name) {
     this.names.splice(this.names.indexOf(name), 1);
-  };
+  }
 
-  this.addChild = function() {
+  addChild() {
     this.child =  new TreeClass ();
-  };
+  }
 
-  this.removeChild = function() {
+  removeChild() {
     this.child = undefined
-  };
-};
+  }
+}
 
 // define a schema
 const TreeModelSchema = new mongoose.Schema ({
   creator_id    : String,
   creator_name  : String,
+  contributor_names: Array,
   tree          : Tree,
 });
 
