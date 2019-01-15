@@ -1,6 +1,6 @@
 function treeDOMObject(treeJSON) {
     const card = document.createElement('div');
-    card.setAttribute('id', treeJSON.id);
+    card.setAttribute('id', treeJSON.title);
     card.className = 'tree-card';
   
     const cardBody = document.createElement('div');
@@ -33,9 +33,6 @@ function main() {
     get('/api/user', {'_id': profileId}, function(profileUser) {
         renderTreeCards(profileUser);
     });
-    get('/api/whoami', {}, function(user) {
-        renderNavbar(user);
-  });
 }
 
 main()
