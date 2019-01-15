@@ -19,8 +19,8 @@ function treeDOMObject(treeJSON) {
 }
 
 function renderTreeCards(user) {
-    const treesDiv = document.getElementById('MAIN BODY ID'); // HTML REFERENCE NEEDED
-    get('/api/trees', {creator_id: req.user}, function(treesArr) {
+    const treesDiv = document.getElementById('user-trees-container');
+    get('/api/trees', {creator_id: user._id}, function(treesArr) {
         for (let i = 0; i < treesArr.length; i++) {
             const currentTree = treesArr[i];
             treesDiv.prepend(treeDOMObject(currentTree));
@@ -28,10 +28,18 @@ function renderTreeCards(user) {
   });
 }
 
+function renderHeading(user) {
+    const headingDiv = document.getElementById('user-heading')
+    const heading = document.createElement('h6')
+    document.innerHTML = user.name + "'s Trees"
+    headingDiv.append(heading)
+}
+
 function main() {
     const profileId = window.location.search.substring(1);
     get('/api/user', {'_id': profileId}, function(profileUser) {
         renderTreeCards(profileUser);
+        renderHeading(profileUser)
     });
 }
 
