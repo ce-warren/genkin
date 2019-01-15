@@ -1,5 +1,3 @@
-import { Tree } from '../../src/models/tree.js';
-
 // + button to add ring (create new html object or just change visual on singe object?)
 
 // name button to allow name input (?) - maybe click ring to add new name, double-click to edit name?
@@ -17,7 +15,7 @@ function renderTitle(treeTitle) {
 
 function renderTree(tree) {
 
-    // wait and see about exact data structure
+    // wait and see about exact data structure - below no longer works
     /* let treeRings = [[tree.names, tree.mediaDict]];
     let thisTree = tree;
     while (thisTree.child !== undefined) {
@@ -34,9 +32,6 @@ function main() {
         renderTitle(tree.title)
         renderTree(tree.tree_object);
     });
-    get('/api/whoami', {}, function(user) {
-        renderNavbar(user);
-  });
 } 
 
 main();

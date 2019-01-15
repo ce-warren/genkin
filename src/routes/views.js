@@ -20,9 +20,8 @@ router.get('/u/user', function(req, res) {
     res.sendFile('user.html', { root: 'src/views' })
   }
   else {
-    res.redirect('/')
-  }
-  ;
+    res.redirect('/auth/google')
+  };
 });
 
 module.exports = router;

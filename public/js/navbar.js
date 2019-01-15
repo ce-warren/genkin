@@ -4,7 +4,7 @@ function newNavbarItem(text, url) {
   itemLink.innerHTML = text;
   itemLink.href = url;
 
-  return itemLink
+  return itemLink;
 }
 
 function renderNavbar(user) {
@@ -18,6 +18,14 @@ function renderNavbar(user) {
     navbarDiv.appendChild(newNavbarItem('Logout', '/logout'));
   } else {
     navbarDiv.appendChild(newNavbarItem('Login', '/auth/google'));
-    //what about sign up
-  }
-}
+  };
+};
+
+function main() {
+  get('/api/whoami', {}, function(user) {
+    console.log(user);
+    renderNavbar(user);
+  });
+};
+
+main();
