@@ -16,12 +16,15 @@ function renderTitle(treeTitle) {
 }
 
 function renderTree(tree) {
-    let treeRings = [[tree.names, tree.mediaDict]];
+
+    // wait and see about exact data structure
+    /* let treeRings = [[tree.names, tree.mediaDict]];
     let thisTree = tree;
     while (thisTree.child !== undefined) {
         treeRings.append([thisTree.names, thisTree.mediaDict]);
         thisTree = thisTree.child;
-    };
+    }; */
+
     // graphics - depends on how the AR stuff works, should it be in HTML circle divs? how would text work?
 };
 

@@ -27,12 +27,14 @@ class Tree {
   };
 };
 
+// tree class won't work so let's try some kinda nested array I guess - implement later
+
 // define a schema
 const TreeModelSchema = new mongoose.Schema ({
   creator_id    : String,
   creator_name  : String,
   contributor_names: Array,
-  tree_object   : Tree,
+  tree_object   : Array,
   public        : Boolean,
   title         : String,
 });
