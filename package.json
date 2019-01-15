@@ -1,7 +1,7 @@
 {
-  "name": "family_tree",
+  "name": "family-tree",
   "version": "1.0.0",
-  "description": "AR Family Trees",
+  "description": "AR/VR Family Trees",
   "main": "app.js",
   "author": "Christina Warren, Charity Everett, Braina Douglas",
   "license": "MIT",

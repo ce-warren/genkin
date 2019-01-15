@@ -15,6 +15,14 @@ router.get('/gallery', function(req, res) {
   res.sendFile('gallery.html', { root: 'src/views' });
 });
 
-
+router.get('/u/user', function(req, res) {
+  if (req.user !== undefined) {
+    res.sendFile('user.html', { root: 'src/views' })
+  }
+  else {
+    res.redirect('/')
+  }
+  ;
+});
 
 module.exports = router;
