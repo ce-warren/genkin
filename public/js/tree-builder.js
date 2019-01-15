@@ -8,6 +8,7 @@ import { Tree } from '../../src/models/tree.js';
 
 // render AR/VR buttons (take to another page with reroute? but also pass in data for specific tree)
 // - really just make the buttons links
+// do this thing again: creatorSpan.setAttribute('href', '/u/profile?' + storyJSON.creator_id);
 
 // actually render the whole thing
 function renderTitle(treeTitle) {
@@ -21,14 +22,18 @@ function renderTree(tree) {
         treeRings.append([thisTree.names, thisTree.mediaDict]);
         thisTree = thisTree.child;
     };
+    // graphics - depends on how the AR stuff works, should it be in HTML circle divs? how would text work?
 };
 
 function main() {
     const treeTitle = window.location.search.substring(1);
-    get('/api/tree', {'title': treeTitle}, function(tree) {
+    get('/api/tree', {'title': treeTitle, 'creator_id': req.user}, function(tree) {
         renderTitle(tree.title)
         renderTree(tree.tree_object);
-      });
+    });
+    get('/api/whoami', {}, function(user) {
+        renderNavbar(user);
+  });
 } 
 
 main();
