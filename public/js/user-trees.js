@@ -1,3 +1,5 @@
+// ATTENTION! copy any changes to gallery.js
+
 function treeDOMObject(treeJSON) {
     const card = document.createElement('div');
     card.setAttribute('id', treeJSON.title);
@@ -16,7 +18,7 @@ function treeDOMObject(treeJSON) {
     // add image or graphic?
 
     return card;
-}
+};
 
 function renderTreeCards(user) {
     const treesDiv = document.getElementById('user-trees-container');
@@ -24,23 +26,23 @@ function renderTreeCards(user) {
         for (let i = 0; i < treesArr.length; i++) {
             const currentTree = treesArr[i];
             treesDiv.prepend(treeDOMObject(currentTree));
-    }
-  });
-}
+        };
+    });
+};
 
 function renderHeading(user) {
     const headingDiv = document.getElementById('user-heading')
     const heading = document.createElement('h1')
-    document.innerHTML = user.name + "'s Trees"
+    document.innerHTML = user.name + "'s Trees";
     headingDiv.append(heading)
-}
+};
 
 function main() {
     const profileId = window.location.search.substring(1);
     get('/api/user', {'_id': profileId}, function(profileUser) {
         renderTreeCards(profileUser);
-        renderHeading(profileUser)
+        renderHeading(profileUser);
     });
-}
+};
 
-main()
+main();

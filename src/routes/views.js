@@ -34,15 +34,13 @@ router.get('/user-trees', function(req, res) {
 });
 
 router.get('/user-trees', function(req, res) {
-  res.sendFile('user-trees.html', { root: 'src/views' })}
-
-  /* if (req.user !== undefined) {
+  if (req.user !== undefined) {
     res.sendFile('user-trees.html', { root: 'src/views' })
   }
   else {
     res.redirect('/auth/google')
-  }; */
-);
+  };
+});
 
 router.get('/media-gallery', function(req, res) {
   if (req.user !== undefined) {
