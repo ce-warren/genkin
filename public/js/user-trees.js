@@ -1,5 +1,3 @@
-// ATTENTION! copy any changes to gallery.js
-
 function treeDOMObject(treeJSON) {
     const card = document.createElement('div');
     card.setAttribute('id', treeJSON.title);
@@ -12,10 +10,10 @@ function treeDOMObject(treeJSON) {
     const titleSpan = document.createElement('a');
     titleSpan.className = 'tree-title';
     titleSpan.innerHTML = 'My Tree'; // uh how should we title it?
-    titleSpan.setAttribute('href', '/tree-builder?' + treeJSON._id); // does this need a route?
+    titleSpan.setAttribute('href', '/tree-builder?' + treeJSON._id);
     cardBody.appendChild(titleSpan);
 
-    // add image or graphic?
+    // add image or graphic? maybe mini - vr?
 
     return card;
 };

@@ -19,13 +19,13 @@ router.get('/whoami', function(req, res) {
 });
 
 router.get('/user', function(req, res) {
-  User.findOne({ _id: req.query._id }, function(err, user) {
+  User.findOne({_id: req.query._id }, function(err, user) {
     res.send(user);
   });
 });
 
-router.get('/trees', function(req, res) {
-  Tree.find({}, function(err, trees) {
+router.get('/public-trees', function(req, res) {
+  Tree.find({public: true}, function(err, trees) {
     res.send(trees);
   });
 });
