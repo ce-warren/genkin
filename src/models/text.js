@@ -6,6 +6,7 @@ const TextModelSchema = new mongoose.Schema ({
   creator_id: String,
   creator_name: String,
   data: String,
+  type: String,
 });
 
 // compile model from schema

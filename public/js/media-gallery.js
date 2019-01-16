@@ -2,11 +2,12 @@ function uploadPhoto() {
     const photo = document.getElementById('upload-selector').files
 
     if (photo !== undefined) {
+        dataType = photo[0].type
         fileReader = new FileReader()
         fileReader.readAsBinaryString(photo[0])
         fileReader.onload = function() {
             const binData = fileReader.result
-            post('/api/image', {content:binData}, function(image) {
+            post('/api/image', {content:binData, type:dataType}, function(image) {
                 showPhotos()
             });
         }  
@@ -26,6 +27,8 @@ function showPhotos() {
         }
     });
 
+    mediaContainer.appendChild(document.createElement('br'))
+
     // create upload button
     const inputField = document.createElement('input');
     inputField.type = 'file';
@@ -44,11 +47,12 @@ function uploadVideo() {
     const video = document.getElementById('upload-selector').files
 
     if (video !== undefined) {
+        dataType = video[0].type
         fileReader = new FileReader()
         fileReader.readAsBinaryString(video[0])
         fileReader.onload = function() {
             const binData = fileReader.result
-            post('/api/video', {content:binData}, function(video) {
+            post('/api/video', {content:binData, type:dataType}, function(video) {
                 showVideos()
             });
         }  
@@ -63,13 +67,16 @@ function showVideos() {
     get('/api/videos', {'creator_id': window.location.search.substring(1)}, function(videos) {
         for (video of videos) {
             const videoHolder = document.createElement('video')
-            videoHolder.class = 'controls'
-            const videoSource = document.createElement('src')
-            videoSource.src = "data:video;base64," + btoa(video.data) // might need more specific attributes, ex. type
+            videoHolder.setAttribute('controls', '')
+            const videoSource = document.createElement('source')
+            videoSource.src = 'data:video;base64,' + btoa(video.data)
+            videoSource.type = video.type
             videoHolder.appendChild(videoSource)
             mediaContainer.prepend(videoHolder)
         }
     });
+
+    mediaContainer.appendChild(document.createElement('br'))
 
     // create upload button
     const inputField = document.createElement('input');
@@ -87,13 +94,18 @@ function showVideos() {
 
 function uploadMusic() {
     const audio = document.getElementById('upload-selector').files
-
     if (audio !== undefined) {
+        if (audio[0].type === 'audio/mp3') {
+            dataType = 'audio/mpeg'
+        }
+        else {
+            dataType = audio[0].type
+        }
         fileReader = new FileReader()
         fileReader.readAsBinaryString(audio[0])
         fileReader.onload = function() {
             const binData = fileReader.result
-            post('/api/audio', {content:binData}, function(audio) {
+            post('/api/audio', {content:binData, type:dataType}, function(audio) {
                 showMusic()
             });
         }  
@@ -108,13 +120,16 @@ function showMusic() {
     get('/api/audios', {'creator_id': window.location.search.substring(1)}, function(audios) {
         for (audio of audios) {
             const audioHolder = document.createElement('audio')
-            audioHolder.class = 'controls'
-            const audioSource = document.createElement('src')
-            audioSource.src = "data:audio;base64," + btoa(audio.data) // might need more specific attributes, ex. type
+            audioHolder.setAttribute('controls', '')
+            const audioSource = document.createElement('source')
+            audioSource.src = 'data:audio;base64,' + btoa(audio.data)
+            audioSource.type = audio.type
             audioHolder.appendChild(audioSource)
             mediaContainer.prepend(audioHolder)
         }
     });
+
+    mediaContainer.appendChild(document.createElement('br'))
 
     // create upload button
     const inputField = document.createElement('input');
@@ -131,13 +146,28 @@ function showMusic() {
 }
 
 function uploadText() {
-    const text = document.getElementById('upload-selector').value;
+    const text = document.getElementById('upload-text').value;
 
     if (text !== undefined) {
-        post('/api/text', {content:text}, function(textOut) {
-            console.log(textOut)
+        post('/api/text', {content:text, type:'manual-input'}, function(textOut) {
             showText();
         }); 
+    }
+}
+
+function uploadTextFile() {
+    const text = document.getElementById('upload-selector').files
+
+    if (text !== undefined) {
+        dataType = text[0].type
+        fileReader = new FileReader()
+        fileReader.readAsText(text[0])
+        fileReader.onload = function() {
+            const textData = fileReader.result
+            post('/api/text', {content:textData, type:dataType}, function(text) {
+                showText();
+            });
+        }  
     }
 }
 
@@ -157,19 +187,32 @@ function showText() {
         }
     });
 
-    // create upload box
-    const textLabel = document.createElement('h6');
-    textLabel.innerHTML = 'Enter Text Here';
-    mediaContainer.appendChild(textLabel);
+    mediaContainer.appendChild(document.createElement('br'))
 
+    // create upload box
     const inputField = document.createElement('textarea');
-    inputField.id = 'upload-selector';
+    inputField.id = 'upload-text';
     mediaContainer.appendChild(inputField);
 
     const button = document.createElement('button');
     button.innerHTML = 'Upload Text';
     button.addEventListener('click', uploadText);
     mediaContainer.appendChild(button);
+
+    mediaContainer.appendChild(document.createElement('br'))
+
+    // create upload button
+    const inputField2 = document.createElement('input');
+    inputField2.type = 'file';
+    inputField2.name = 'Upload';
+    inputField2.id = 'upload-selector';
+    inputField2.accept = '.txt'
+    mediaContainer.appendChild(inputField2);
+
+    const button2 = document.createElement('button');
+    button2.innerHTML = 'Upload Text File';
+    button2.addEventListener('click', uploadTextFile);
+    mediaContainer.appendChild(button2);
 }
 
 function tabButtons(user) {

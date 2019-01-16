@@ -81,7 +81,8 @@ router.post('/image', connect.ensureLoggedIn(), function(req, res) {
   const newImage = new Image({
     'creator_id': req.user._id,
     'creator_name': req.user.name,
-    'data': req.body.content
+    'data': req.body.content,
+    'type': req.body.type
   });
 
   newImage.save(function(err,image) {
@@ -107,7 +108,8 @@ router.post('/video', connect.ensureLoggedIn(), function(req, res) {
   const newVideo = new Video({
     'creator_id': req.user._id,
     'creator_name': req.user.name,
-    'data': req.body.content
+    'data': req.body.content,
+    'type': req.body.type
   });
 
   newVideo.save(function(err,video) {
@@ -133,7 +135,8 @@ router.post('/audio', connect.ensureLoggedIn(), function(req, res) {
   const newAudio = new Audio({
     'creator_id': req.user._id,
     'creator_name': req.user.name,
-    'data': req.body.content
+    'data': req.body.content,
+    'type': req.body.type
   });
 
   newAudio.save(function(err,audio) {
@@ -159,7 +162,8 @@ router.post('/text', connect.ensureLoggedIn(), function(req, res) {
   const newText = new Text({
     'creator_id': req.user._id,
     'creator_name': req.user.name,
-    'data': req.body.content
+    'data': req.body.content,
+    'type': req.body.type
   });
 
   newText.save(function(err,text) {
