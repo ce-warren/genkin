@@ -22,8 +22,6 @@ function renderTreeCards(user) {
     const treesDiv = document.getElementById('user-trees-container');
     get('/api/user-trees', {'creator_id': user._id}, function(treesArr) {
         for (let i = 0; i < treesArr.length; i++) {
-            console.log(treesArr[i].creator_id)
-            console.log(user._id)
             const currentTree = treesArr[i];
             treesDiv.prepend(treeDOMObject(currentTree));
         };
