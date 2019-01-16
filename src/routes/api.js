@@ -6,6 +6,9 @@ const connect = require('connect-ensure-login');
 const User = require('../models/user');
 const Tree = require('../models/tree');
 const Image = require('../models/image');
+const Video = require('../models/video');
+const Audio = require('../models/audio');
+const Text = require('../models/text');
 
 const router = express.Router();
 
@@ -55,8 +58,6 @@ router.post('/tree', connect.ensureLoggedIn(), function(req, res) {
     });
   
     newTree.save(function(err,tree) {
-      Tree.findOne({ _id: req.user._id },function(err,tree) {
-        });
       if (err) console.log(err);
     });
     res.send(newTree);
@@ -84,11 +85,87 @@ router.post('/image', connect.ensureLoggedIn(), function(req, res) {
   });
 
   newImage.save(function(err,image) {
-    Image.findOne({ _id: req.user._id },function(err,image) {
-      });
     if (err) console.log(err);
   });
   res.send(newImage);
+});
+
+// videos
+router.get('/videos', function(req, res) {
+  Video.find({creator_id: req.query.creator_id}, function(err, videos) {
+    res.send(videos);
+  });
+});
+
+router.get('/video', function(req, res) {
+  Video.findOne({_id: req.query._id}, function(err, video) {
+    res.send(video);
+  });
+});
+
+router.post('/video', connect.ensureLoggedIn(), function(req, res) {
+  const newVideo = new Video({
+    'creator_id': req.user._id,
+    'creator_name': req.user.name,
+    'data': req.body.content
+  });
+
+  newVideo.save(function(err,video) {
+    if (err) console.log(err);
+  });
+  res.send(newVideo);
+});
+
+// audio
+router.get('/audios', function(req, res) {
+  Audio.find({creator_id: req.query.creator_id}, function(err, audios) {
+    res.send(audios);
+  });
+});
+
+router.get('/audio', function(req, res) {
+  Audio.findOne({_id: req.query._id}, function(err, audio) {
+    res.send(audio);
+  });
+});
+
+router.post('/audio', connect.ensureLoggedIn(), function(req, res) {
+  const newAudio = new Audio({
+    'creator_id': req.user._id,
+    'creator_name': req.user.name,
+    'data': req.body.content
+  });
+
+  newAudio.save(function(err,audio) {
+    if (err) console.log(err);
+  });
+  res.send(newAudio);
+});
+
+//text
+router.get('/texts', function(req, res) {
+  Text.find({creator_id: req.query.creator_id}, function(err, texts) {
+    res.send(texts);
+  });
+});
+
+router.get('/text', function(req, res) {
+  Text.findOne({_id: req.query._id}, function(err, text) {
+    res.send(text);
+  });
+});
+
+router.post('/text', connect.ensureLoggedIn(), function(req, res) {
+  const newText = new Text({
+    'creator_id': req.user._id,
+    'creator_name': req.user.name,
+    'data': req.body.content
+  });
+
+  newText.save(function(err,text) {
+    if (err) console.log(err);
+  });
+  res.send(newText);
 });
 
 module.exports = router;
