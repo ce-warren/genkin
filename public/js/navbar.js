@@ -14,7 +14,7 @@ function renderNavbar(user) {
   navbarDiv.appendChild(newNavbarItem('About', '/about'));
   navbarDiv.appendChild(newNavbarItem('Gallery', '/gallery'));
   if (user._id !== undefined) {
-    navbarDiv.appendChild(newNavbarItem(user_.id, '/u/profile?'+user._id)); //changed to just being the username
+    navbarDiv.appendChild(newNavbarItem('User', '/u/profile?'+user._id));
     navbarDiv.appendChild(newNavbarItem('Logout', '/logout'));
   } else {
     navbarDiv.appendChild(newNavbarItem('Login', '/auth/google'));

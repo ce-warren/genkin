@@ -9,8 +9,8 @@ function treeDOMObject(treeJSON) {
   
     const titleSpan = document.createElement('a');
     titleSpan.className = 'tree-title';
-    titleSpan.innerHTML = treeJSON.title;
-    titleSpan.setAttribute('href', '/tree-builder?' + treeJSON.title); //'/u/profile?' + storyJSON.creatorid); // DOES THIS WORK?
+    titleSpan.innerHTML = 'My Tree'; // uh how should we title it?
+    titleSpan.setAttribute('href', '/tree-builder?' + treeJSON._id);
     cardBody.appendChild(titleSpan);
 
     // add image or graphic?
