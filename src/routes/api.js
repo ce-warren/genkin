@@ -10,7 +10,6 @@ const router = express.Router();
 
 // api endpoints
 router.get('/whoami', function(req, res) {
-  
   if(req.isAuthenticated()){
     res.send(req.user);
   }
@@ -31,10 +30,7 @@ router.get('/trees', function(req, res) {
   });
 });
 
-router.post(
-  '/tree',
-  connect.ensureLoggedIn(),
-  function(req, res) {
+router.post('/tree', connect.ensureLoggedIn(), function(req, res) {
     const newTree = new Tree({
       'creator_id': req.user._id,
       'creator_name': req.user.name,
@@ -45,13 +41,11 @@ router.post(
   
     newTree.save(function(err,story) {
       User.findOne({ _id: req.user._id },function(err,user) {
-        user.save(); // this is OK, because the following lines of code are not reliant on the state of user, so we don't have to shove them in a callback. 
+        user.save();
         });
-        // configure socketio
       if (err) console.log(err);
     });
-
-    res.send({});
+    res.send(newTree);
   }
 );
 

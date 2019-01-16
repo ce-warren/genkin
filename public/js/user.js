@@ -1,11 +1,8 @@
-function createTree() { // sketchy
-    user_id = window.location.search.substring(1)
-
-    post('/api/tree', {});
-
-    get('/api/trees', {'tree_object': [], 'creator_id': user_id}, function(trees) {
-        console.log(trees)
-        window.location.assign('/tree-builder?' + trees[0]._id);
+function createTree() {
+    post('/api/tree', {}, function(tree) {
+        get('/api/trees', {'_id':tree.id}, function(trees) {
+            window.location.assign('/tree-builder?' + trees[0]._id);
+        });
     });
 };
 
@@ -36,4 +33,4 @@ function main() {
     });
 };
 
-main()
+main();
