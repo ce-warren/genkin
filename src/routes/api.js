@@ -30,6 +30,12 @@ router.get('/trees', function(req, res) {
   });
 });
 
+router.get('/user-trees', function(req, res) {
+  Tree.find({creator_id: req.query.creator_id}, function(err, trees) {
+    res.send(trees);
+  });
+});
+
 router.post('/tree', connect.ensureLoggedIn(), function(req, res) {
     const newTree = new Tree({
       'creator_id': req.user._id,

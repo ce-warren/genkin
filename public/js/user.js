@@ -1,8 +1,6 @@
 function createTree() {
     post('/api/tree', {}, function(tree) {
-        get('/api/trees', {'_id':tree.id}, function(trees) {
-            window.location.assign('/tree-builder?' + trees[0]._id);
-        });
+        window.location.assign('/tree-builder?' + tree._id);
     });
 };
 

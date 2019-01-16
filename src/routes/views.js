@@ -60,4 +60,22 @@ router.get('/tree-builder', function(req, res) {
   };
 });
 
+router.get('/tree-ar', function(req, res) {
+  if (req.user !== undefined) {
+    res.sendFile('tree-ar.html', { root: 'src/views' })
+  }
+  else {
+    res.redirect('/auth/google')
+  };
+});
+
+router.get('/tree-vr', function(req, res) {
+  if (req.user !== undefined) {
+    res.sendFile('tree-vr.html', { root: 'src/views' })
+  }
+  else {
+    res.redirect('/auth/google')
+  };
+});
+
 module.exports = router;
