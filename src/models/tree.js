@@ -37,8 +37,7 @@ const TreeModelSchema = new mongoose.Schema ({
   tree_object   : Array,
   public        : Boolean,
 });
-// enforce titles being unique when creating a new tree
-// also make creator_id req.user
+// might have to change tree data structure - also change in user.js
 
 // compile model from schema
 module.exports = mongoose.model('TreeModel', TreeModelSchema);

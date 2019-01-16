@@ -10,7 +10,7 @@ function treeDOMObject(treeJSON) {
     const titleSpan = document.createElement('a');
     titleSpan.className = 'tree-title';
     titleSpan.innerHTML = 'My Tree'; // uh how should we title it?
-    titleSpan.setAttribute('href', '/tree-builder?' + treeJSON._id);
+    titleSpan.setAttribute('href', '/tree-builder?' + treeJSON._id); // does this need a route?
     cardBody.appendChild(titleSpan);
 
     // add image or graphic?
@@ -30,7 +30,7 @@ function renderTreeCards(user) {
 
 function renderHeading(user) {
     const headingDiv = document.getElementById('user-heading')
-    const heading = document.createElement('h6')
+    const heading = document.createElement('h1')
     document.innerHTML = user.name + "'s Trees"
     headingDiv.append(heading)
 }
