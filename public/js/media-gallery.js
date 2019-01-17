@@ -23,6 +23,7 @@ function showPhotos() {
         for (image of images) {
             const imageHolder = document.createElement('img')
             imageHolder.src = 'data:image;base64,' + btoa(image.data)
+            imageHolder.setAttribute('class','photo-holder media-holder')
             mediaContainer.prepend(imageHolder)
         }
     });
@@ -30,17 +31,21 @@ function showPhotos() {
     mediaContainer.appendChild(document.createElement('br'))
 
     // create upload button
+    const inputArea = document.createElement('div')
+    inputArea.setAttribute('class','input-area')
+    mediaContainer.appendChild(inputArea)
+
     const inputField = document.createElement('input');
     inputField.type = 'file';
     inputField.name = 'Upload';
     inputField.id = 'upload-selector';
     inputField.accept = 'image/*'
-    mediaContainer.appendChild(inputField);
+    inputArea.appendChild(inputField);
 
     const button = document.createElement('button');
     button.innerHTML = 'Upload Photo';
     button.addEventListener('click', uploadPhoto);
-    mediaContainer.appendChild(button);
+    inputArea.appendChild(button);
 }
 
 function uploadVideo() {
@@ -72,6 +77,7 @@ function showVideos() {
             videoSource.src = 'data:video;base64,' + btoa(video.data)
             videoSource.type = video.type
             videoHolder.appendChild(videoSource)
+            videoHolder.setAttribute('class','video-holder media-holder')
             mediaContainer.prepend(videoHolder)
         }
     });
@@ -79,17 +85,21 @@ function showVideos() {
     mediaContainer.appendChild(document.createElement('br'))
 
     // create upload button
+    const inputArea = document.createElement('div')
+    inputArea.setAttribute('class','input-area')
+    mediaContainer.appendChild(inputArea)
+
     const inputField = document.createElement('input');
     inputField.type = 'file';
     inputField.name = 'Upload';
     inputField.id = 'upload-selector';
     inputField.accept = 'video/*'
-    mediaContainer.appendChild(inputField);
+    inputArea.appendChild(inputField);
 
     const button = document.createElement('button');
     button.innerHTML = 'Upload Video';
     button.addEventListener('click', uploadVideo);
-    mediaContainer.appendChild(button);
+    inputArea.appendChild(button);
 }
 
 function uploadMusic() {
@@ -125,6 +135,7 @@ function showMusic() {
             audioSource.src = 'data:audio;base64,' + btoa(audio.data)
             audioSource.type = audio.type
             audioHolder.appendChild(audioSource)
+            audioHolder.setAttribute('class','audio-holder media-holder')
             mediaContainer.prepend(audioHolder)
         }
     });
@@ -132,17 +143,21 @@ function showMusic() {
     mediaContainer.appendChild(document.createElement('br'))
 
     // create upload button
+    const inputArea = document.createElement('div')
+    inputArea.setAttribute('class','input-area')
+    mediaContainer.appendChild(inputArea)
+
     const inputField = document.createElement('input');
     inputField.type = 'file';
     inputField.name = 'Upload';
     inputField.id = 'upload-selector';
     inputField.accept = 'audio/*'
-    mediaContainer.appendChild(inputField);
+    inputArea.appendChild(inputField);
 
     const button = document.createElement('button');
     button.innerHTML = 'Upload Audio File';
     button.addEventListener('click', uploadMusic);
-    mediaContainer.appendChild(button);
+    inputArea.appendChild(button);
 }
 
 function uploadText() {
@@ -183,23 +198,16 @@ function showText() {
             const textP = document.createElement('p')
             textP.innerHTML = text.data
             textHolder.appendChild(textP)
+            textHolder.setAttribute('class','text-holder media-holder')
             mediaContainer.prepend(textHolder)
         }
     });
 
     mediaContainer.appendChild(document.createElement('br'))
 
-    // create upload box
-    const inputField = document.createElement('textarea');
-    inputField.id = 'upload-text';
-    mediaContainer.appendChild(inputField);
-
-    const button = document.createElement('button');
-    button.innerHTML = 'Upload Text';
-    button.addEventListener('click', uploadText);
-    mediaContainer.appendChild(button);
-
-    mediaContainer.appendChild(document.createElement('br'))
+    const inputArea = document.createElement('div')
+    inputArea.setAttribute('class','input-area')
+    mediaContainer.appendChild(inputArea)
 
     // create upload button
     const inputField2 = document.createElement('input');
@@ -207,12 +215,25 @@ function showText() {
     inputField2.name = 'Upload';
     inputField2.id = 'upload-selector';
     inputField2.accept = '.txt'
-    mediaContainer.appendChild(inputField2);
+    inputArea.appendChild(inputField2);
 
     const button2 = document.createElement('button');
     button2.innerHTML = 'Upload Text File';
     button2.addEventListener('click', uploadTextFile);
-    mediaContainer.appendChild(button2);
+    inputArea.appendChild(button2);
+
+    inputArea.appendChild(document.createElement('br'))
+    inputArea.appendChild(document.createElement('br'))
+
+    // create upload box
+    const inputField = document.createElement('textarea');
+    inputField.id = 'upload-text';
+    inputArea.appendChild(inputField);
+
+    const button = document.createElement('button');
+    button.innerHTML = 'Upload Text';
+    button.addEventListener('click', uploadText);
+    inputArea.appendChild(button);
 }
 
 function tabButtons(user) {
