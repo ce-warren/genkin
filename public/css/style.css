@@ -44,6 +44,7 @@ img {
 
 body {
   background-image: url(../images/trees_background.jpeg);
+  /* image: http://www.ewallpapers.eu/53938-forest-sun.html */
   background-size: cover;
   background-attachment: fixed
 }

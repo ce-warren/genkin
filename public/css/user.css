@@ -20,18 +20,21 @@
 
 #my-trees-link {
     background-image: url(../images/my_trees.jpeg);
+    /* image: https://jfcs-eastbay.org/community-memorials-for-the-pittsburgh-victims/tree-of-life/ */
     background-size: cover;
     background-position: center;
 }
 
 #media-link {
     background-image: url(../images/media.jpeg);
+    /* image: https://pxhere.com/en/photo/1196210 */
     background-size: cover;
     background-position: center;
 }
 
 #new-tree-link {
     background-image: url(../images/new_tree.jpeg);
+    /* image: https://homeguides.sfgate.com/happens-stump-tree-bacteria-feeds-off-it-99787.html */
     background-size: cover;
     background-position: center;
 }
