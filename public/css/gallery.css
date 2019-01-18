@@ -1,7 +1,35 @@
 .trees-container {
-
+    
 }
   
 .tree-card {
+    background-color: #F1AB5E;
+    margin-top: 1rem;
+    box-shadow: 1px 1px 2px black;
+    border-radius: .6rem;
+    width: 45%;
+    display: inline-block;
+    margin-left: .5rem;
+    margin-right: .5rem
+}
 
+.card-button {
+    border: solid;
+    border-color: #212529;
+    border-radius: 3px;
+    border-width: 1px;
+    text-align: center;
+}
+
+.card-button:hover {
+    cursor: pointer;
+}
+
+a {
+    color:#212529
+}
+
+a:hover {
+    color: #212529;
+    text-decoration: none;
 }

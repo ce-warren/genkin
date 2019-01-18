@@ -7,13 +7,41 @@ function treeDOMObject(treeJSON) {
     cardBody.className = 'card-body';
     card.appendChild(cardBody);
   
-    const titleSpan = document.createElement('a');
+    const titleSpan = document.createElement('h6');
     titleSpan.className = 'tree-title';
     titleSpan.innerHTML = 'My Tree'; // uh how should we title it?
-    titleSpan.setAttribute('href', '/tree-builder?' + treeJSON._id);
+    
     cardBody.appendChild(titleSpan);
 
     // add image or graphic? maybe mini - vr?
+    
+    const buttonDiv = document.createElement('div')
+    buttonDiv.className = 'tree-button-div row mt-4'
+    cardBody.appendChild(buttonDiv)
+
+    const editButtonDiv = document.createElement('div')
+    editButtonDiv.className = 'col-4'
+    const editButton = document.createElement('div')
+    editButton.className = 'card-button'
+    editButton.innerHTML = '<a href="/tree-builder?' + treeJSON._id + '">Edit</a>'
+    editButtonDiv.appendChild(editButton)
+    buttonDiv.appendChild(editButtonDiv)
+
+    const renderARButtonDiv = document.createElement('div')
+    renderARButtonDiv.className = 'col-4'
+    const renderARButton = document.createElement('div')
+    renderARButton.className = 'card-button'
+    renderARButton.innerHTML = '<a href="/tree-ar?' + treeJSON._id + '">AR</a>'
+    renderARButtonDiv.appendChild(renderARButton)
+    buttonDiv.appendChild(renderARButtonDiv)
+
+    const renderVRButtonDiv = document.createElement('div')
+    renderVRButtonDiv.className = 'col-4'
+    const renderVRButton = document.createElement('div')
+    renderVRButton.className = 'card-button'
+    renderVRButton.innerHTML = '<a href="/tree-vr?' + treeJSON._id + '">VR</a>'
+    renderVRButtonDiv.appendChild(renderVRButton)
+    buttonDiv.appendChild(renderVRButtonDiv)
 
     return card;
 };
