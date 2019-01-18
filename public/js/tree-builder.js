@@ -1,5 +1,3 @@
-import { userInfo } from "os";
-
 // + button to add ring (create new html object or just change visual on singe object?)
 
 // name button to allow name input (?) - maybe click ring to add new name, double-click to edit name?
@@ -30,6 +28,8 @@ function main() {
     const treeId = window.location.search.substring(1);
     get('/api/tree', {'_id': treeId}, function(tree) {
         renderTree(tree.tree_object);
+        const title = document.getElementById('title-place')
+        title.innerHTML = 'Tree Builder | ' + tree.creator_name
     });
 } ;
 

@@ -18,6 +18,10 @@
     cursor: pointer;
 }
 
+.current-nav-item {
+    background-color:#F1AB5E
+}
+
 .input-area {
     padding: 1rem;
     margin-left: 5rem;
@@ -43,7 +47,8 @@
     display:block;
     margin:.4rem;
     width: 80%;
-    float:center
+    margin-right:10%;
+    margin-left:10%;
 }
 
 .text-holder {
@@ -52,12 +57,16 @@
     border-radius: 6px;
     padding: .6rem;
     margin: .6rem;
-    margin-left:25%;
-    margin-right:25%
+    margin-right: 10%;
+    margin-left: 10%;
 }
 
 button {
     float: right;
+}
+
+button:hover {
+    cursor: pointer;
 }
 
 img {

@@ -1,6 +1,6 @@
 function treeDOMObject(treeJSON) {
     const card = document.createElement('div');
-    card.setAttribute('id', treeJSON.title);
+    card.setAttribute('id', treeJSON._id);
     card.className = 'tree-card';
   
     const cardBody = document.createElement('div');
@@ -31,8 +31,11 @@ function renderTreeCards(user) {
 function renderHeading(user) {
     const headingDiv = document.getElementById('user-heading')
     const heading = document.createElement('h1')
-    document.innerHTML = user.name + "'s Trees";
+    heading.innerHTML = user.name + "'s Trees";
     headingDiv.append(heading)
+
+    const title = document.getElementById('title-place')
+    title.innerHTML = 'Trees | ' + user.name
 };
 
 function main() {

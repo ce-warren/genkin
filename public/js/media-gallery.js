@@ -1,7 +1,7 @@
 function uploadPhoto() {
     const photo = document.getElementById('upload-selector').files
 
-    if (photo !== undefined) {
+    if (photo.length !== 0) {
         dataType = photo[0].type
         fileReader = new FileReader()
         fileReader.readAsBinaryString(photo[0])
@@ -15,6 +15,15 @@ function uploadPhoto() {
 }
 
 function showPhotos() {
+    for (i of document.getElementsByClassName('media-nav-item')) {
+        if (i.id === 'photos-tab') {
+            i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
+        }
+        else {
+            i.setAttribute('class', 'nav-item media-nav-item')
+        }
+    }
+
     const mediaContainer = document.getElementById('media-container')
     mediaContainer.innerHTML = ''
 
@@ -51,7 +60,7 @@ function showPhotos() {
 function uploadVideo() {
     const video = document.getElementById('upload-selector').files
 
-    if (video !== undefined) {
+    if (video.length !== 0) {
         dataType = video[0].type
         fileReader = new FileReader()
         fileReader.readAsBinaryString(video[0])
@@ -65,6 +74,14 @@ function uploadVideo() {
 }
 
 function showVideos() {
+    for (i of document.getElementsByClassName('media-nav-item')) {
+        if (i.id === 'videos-tab') {
+            i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
+        }
+        else {
+            i.setAttribute('class', 'nav-item media-nav-item')
+        }
+    }
     const mediaContainer = document.getElementById('media-container')
     mediaContainer.innerHTML = ''
 
@@ -103,8 +120,17 @@ function showVideos() {
 }
 
 function uploadMusic() {
+    for (i of document.getElementsByClassName('media-nav-item')) {
+        if (i.id === 'music-tab') {
+            i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
+        }
+        else {
+            i.setAttribute('class', 'nav-item media-nav-item')
+        }
+    }
+
     const audio = document.getElementById('upload-selector').files
-    if (audio !== undefined) {
+    if (audio.length !== 0) {
         if (audio[0].type === 'audio/mp3') {
             dataType = 'audio/mpeg'
         }
@@ -123,6 +149,15 @@ function uploadMusic() {
 }
 
 function showMusic() {
+    for (i of document.getElementsByClassName('media-nav-item')) {
+        if (i.id === 'music-tab') {
+            i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
+        }
+        else {
+            i.setAttribute('class', 'nav-item media-nav-item')
+        }
+    }
+
     const mediaContainer = document.getElementById('media-container')
     mediaContainer.innerHTML = ''
 
@@ -163,7 +198,7 @@ function showMusic() {
 function uploadText() {
     const text = document.getElementById('upload-text').value;
 
-    if (text !== undefined) {
+    if (text !== '') {
         post('/api/text', {content:text, type:'manual-input'}, function(textOut) {
             showText();
         }); 
@@ -171,9 +206,10 @@ function uploadText() {
 }
 
 function uploadTextFile() {
+
     const text = document.getElementById('upload-selector').files
 
-    if (text !== undefined) {
+    if (text.length !== 0) {
         dataType = text[0].type
         fileReader = new FileReader()
         fileReader.readAsText(text[0])
@@ -187,6 +223,15 @@ function uploadTextFile() {
 }
 
 function showText() {
+    for (i of document.getElementsByClassName('media-nav-item')) {
+        if (i.id === 'text-tab') {
+            i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
+        }
+        else {
+            i.setAttribute('class', 'nav-item media-nav-item')
+        }
+    }
+
     const mediaContainer = document.getElementById('media-container');
     mediaContainer.innerHTML = '';
 
@@ -194,10 +239,12 @@ function showText() {
     get('/api/texts', {'creator_id': window.location.search.substring(1)}, function(texts) {
         for (text of texts) {
             const textHolder = document.createElement('div')
-            textHolder.class = 'text-container'
-            const textP = document.createElement('p')
-            textP.innerHTML = text.data
-            textHolder.appendChild(textP)
+            pList = text.data.split(/(\r\n|\n|\r)/gm)
+            for (i of pList) {
+                const textP = document.createElement('p')
+                textP.innerHTML = i
+                textHolder.appendChild(textP)
+            }
             textHolder.setAttribute('class','text-holder media-holder')
             mediaContainer.prepend(textHolder)
         }
@@ -256,6 +303,8 @@ function main() {
     get('/api/user', {'_id': profileId}, function(profileUser) {
         tabButtons(profileUser);
         showPhotos()
+        const title = document.getElementById('title-place')
+        title.innerHTML = 'Media Gallery | ' + profileUser.name
     });
 };
 

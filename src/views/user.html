@@ -2,9 +2,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Media Gallery</title> <!--maybe put username into title-->
+    <title id="title-place"></title> <!--maybe put username into title-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/user.css">
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
@@ -14,22 +15,23 @@
       </div>
     </nav>
    
-    <div class="text-center" id="user-heading">
-      <!-- add username heading here -->
-    </div>
+    <div class="about-data">
+      <div class="text-center" id="user-heading">
+        <!-- add username heading here -->
+      </div>
 
-    <ul class="nav flex-column">
-      <!-- add href to each item -->
-      <li class="nav-item">
-        <a class="nav-link" id="my-trees-link">My Trees</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="media-link">Media</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" id="new-tree-link">New Tree</a>
-      </li>
-    </ul>
+      <div class="nav-buttons row mt-4 my-container" id="button-container">
+        <div class="col-4">
+            <h2 class="nav-button" id="my-trees-link">My Trees</h2>
+        </div>
+        <div class="col-4">
+            <h2 class="nav-button" id="media-link">Media</h2>
+        </div>
+        <div class="col-4">
+            <h2 class="nav-button" id="new-tree-link">New Tree</h2>
+        </div>
+      </div>
+    </div>
 
 
   </body>
