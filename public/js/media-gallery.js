@@ -26,6 +26,9 @@ function showPhotos() {
 
     const mediaContainer = document.getElementById('media-container')
     mediaContainer.innerHTML = ''
+    const loader = document.createElement('div')
+    loader.className = 'loader'
+    mediaContainer.appendChild(loader)
 
     // query database for all photos, display photos
     get('/api/images', {'creator_id': window.location.search.substring(1)}, function(images) {
@@ -35,6 +38,7 @@ function showPhotos() {
             imageHolder.setAttribute('class','photo-holder media-holder')
             mediaContainer.prepend(imageHolder)
         }
+        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
@@ -84,6 +88,9 @@ function showVideos() {
     }
     const mediaContainer = document.getElementById('media-container')
     mediaContainer.innerHTML = ''
+    const loader = document.createElement('div')
+    loader.className = 'loader'
+    mediaContainer.appendChild(loader)
 
     // query database for all videos, display videos
     get('/api/videos', {'creator_id': window.location.search.substring(1)}, function(videos) {
@@ -97,6 +104,7 @@ function showVideos() {
             videoHolder.setAttribute('class','video-holder media-holder')
             mediaContainer.prepend(videoHolder)
         }
+        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
@@ -160,6 +168,9 @@ function showMusic() {
 
     const mediaContainer = document.getElementById('media-container')
     mediaContainer.innerHTML = ''
+    const loader = document.createElement('div')
+    loader.className = 'loader'
+    mediaContainer.appendChild(loader)
 
     // query database for all audio, display audio files
     get('/api/audios', {'creator_id': window.location.search.substring(1)}, function(audios) {
@@ -173,6 +184,7 @@ function showMusic() {
             audioHolder.setAttribute('class','audio-holder media-holder')
             mediaContainer.prepend(audioHolder)
         }
+        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
@@ -234,6 +246,9 @@ function showText() {
 
     const mediaContainer = document.getElementById('media-container');
     mediaContainer.innerHTML = '';
+    const loader = document.createElement('div')
+    loader.className = 'loader'
+    mediaContainer.appendChild(loader)
 
     // query database for all text files, display text files
     get('/api/texts', {'creator_id': window.location.search.substring(1)}, function(texts) {
@@ -248,6 +263,7 @@ function showText() {
             textHolder.setAttribute('class','text-holder media-holder')
             mediaContainer.prepend(textHolder)
         }
+        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
