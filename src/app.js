@@ -15,8 +15,8 @@ const api = require('./routes/api');
 const app = express();
 
 // set POST request body parser
-app.use(bodyParser.urlencoded({limit: '10mb', extended: true}));
-app.use(bodyParser.json({limit: '10mb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
+app.use(bodyParser.json({limit: '100mb', extended: true}));
 
 // set up sessions
 app.use(session({

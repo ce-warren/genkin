@@ -1,3 +1,5 @@
+let currentTab;
+
 function uploadPhoto() {
     const photo = document.getElementById('upload-selector').files
 
@@ -15,6 +17,7 @@ function uploadPhoto() {
 }
 
 function showPhotos() {
+    currentTab = 'photo'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'photos-tab') {
             i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
@@ -32,13 +35,15 @@ function showPhotos() {
 
     // query database for all photos, display photos
     get('/api/images', {'creator_id': window.location.search.substring(1)}, function(images) {
-        for (image of images) {
-            const imageHolder = document.createElement('img')
-            imageHolder.src = 'data:image;base64,' + btoa(image.data)
-            imageHolder.setAttribute('class','photo-holder media-holder')
-            mediaContainer.prepend(imageHolder)
+        if (currentTab === 'photo') {
+            for (image of images) {
+                const imageHolder = document.createElement('img')
+                imageHolder.src = 'data:image;base64,' + btoa(image.data)
+                imageHolder.setAttribute('class','photo-holder media-holder')
+                mediaContainer.prepend(imageHolder)
+            }
+            loader.className = ''
         }
-        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
@@ -71,6 +76,7 @@ function uploadVideo() {
         fileReader.onload = function() {
             const binData = fileReader.result
             post('/api/video', {content:binData, type:dataType}, function(video) {
+                console.log(video)
                 showVideos()
             });
         }  
@@ -78,6 +84,7 @@ function uploadVideo() {
 }
 
 function showVideos() {
+    currentTab = 'video'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'videos-tab') {
             i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
@@ -94,17 +101,19 @@ function showVideos() {
 
     // query database for all videos, display videos
     get('/api/videos', {'creator_id': window.location.search.substring(1)}, function(videos) {
-        for (video of videos) {
-            const videoHolder = document.createElement('video')
-            videoHolder.setAttribute('controls', '')
-            const videoSource = document.createElement('source')
-            videoSource.src = 'data:video;base64,' + btoa(video.data)
-            videoSource.type = video.type
-            videoHolder.appendChild(videoSource)
-            videoHolder.setAttribute('class','video-holder media-holder')
-            mediaContainer.prepend(videoHolder)
+        if (currentTab === 'video') {
+            for (video of videos) {
+                const videoHolder = document.createElement('video')
+                videoHolder.setAttribute('controls', '')
+                const videoSource = document.createElement('source')
+                videoSource.src = 'data:video;base64,' + btoa(video.data)
+                videoSource.type = video.type
+                videoHolder.appendChild(videoSource)
+                videoHolder.setAttribute('class','video-holder media-holder')
+                mediaContainer.prepend(videoHolder)
+            }
+            loader.className = ''
         }
-        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
@@ -157,6 +166,7 @@ function uploadMusic() {
 }
 
 function showMusic() {
+    currentTab = 'music'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'music-tab') {
             i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
@@ -174,17 +184,19 @@ function showMusic() {
 
     // query database for all audio, display audio files
     get('/api/audios', {'creator_id': window.location.search.substring(1)}, function(audios) {
-        for (audio of audios) {
-            const audioHolder = document.createElement('audio')
-            audioHolder.setAttribute('controls', '')
-            const audioSource = document.createElement('source')
-            audioSource.src = 'data:audio;base64,' + btoa(audio.data)
-            audioSource.type = audio.type
-            audioHolder.appendChild(audioSource)
-            audioHolder.setAttribute('class','audio-holder media-holder')
-            mediaContainer.prepend(audioHolder)
+        if (currentTab === 'music') {
+            for (audio of audios) {
+                const audioHolder = document.createElement('audio')
+                audioHolder.setAttribute('controls', '')
+                const audioSource = document.createElement('source')
+                audioSource.src = 'data:audio;base64,' + btoa(audio.data)
+                audioSource.type = audio.type
+                audioHolder.appendChild(audioSource)
+                audioHolder.setAttribute('class','audio-holder media-holder')
+                mediaContainer.prepend(audioHolder)
+            }
+            loader.className = ''
         }
-        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
@@ -235,6 +247,7 @@ function uploadTextFile() {
 }
 
 function showText() {
+    currentTab = 'text'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'text-tab') {
             i.setAttribute('class', 'nav-item media-nav-item current-nav-item')
@@ -252,18 +265,20 @@ function showText() {
 
     // query database for all text files, display text files
     get('/api/texts', {'creator_id': window.location.search.substring(1)}, function(texts) {
-        for (text of texts) {
-            const textHolder = document.createElement('div')
-            pList = text.data.split(/(\r\n|\n|\r)/gm)
-            for (i of pList) {
-                const textP = document.createElement('p')
-                textP.innerHTML = i
-                textHolder.appendChild(textP)
+        if (currentTab === 'text') {
+            for (text of texts) {
+                const textHolder = document.createElement('div')
+                pList = text.data.split(/(\r\n|\n|\r)/gm)
+                for (i of pList) {
+                    const textP = document.createElement('p')
+                    textP.innerHTML = i
+                    textHolder.appendChild(textP)
+                }
+                textHolder.setAttribute('class','text-holder media-holder')
+                mediaContainer.prepend(textHolder)
             }
-            textHolder.setAttribute('class','text-holder media-holder')
-            mediaContainer.prepend(textHolder)
+            loader.className = ''
         }
-        mediaContainer.removeChild(loader)
     });
 
     mediaContainer.appendChild(document.createElement('br'))
@@ -312,7 +327,6 @@ function tabButtons(user) {
     const textTab = document.getElementById('text-tab')
     textTab.addEventListener('click', showText)
 };
-    
 
 function main() {
     const profileId = window.location.search.substring(1);
