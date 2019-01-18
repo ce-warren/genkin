@@ -35,12 +35,20 @@
 }
 
 .photo-holder {
+    width: 80%;
+    height: auto;
     margin:.4rem;
+    margin-left: 10%;
+    margin-right: 10%;
+    display: block;
 }
 
 .video-holder {
     display:block;
     margin:.4rem;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%
 }
 
 .audio-holder {
@@ -67,9 +75,4 @@ button {
 
 button:hover {
     cursor: pointer;
-}
-
-img {
-    height: 200px;
-    width: auto
 }
