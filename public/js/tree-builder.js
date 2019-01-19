@@ -1,5 +1,3 @@
-import { prependOnceListener } from "cluster";
-
 class Tree {
     constructor() {
         this.names = [] // array of Person objects
@@ -141,7 +139,10 @@ function newGraph (graph) {
 
 function checkForChildren(treeList) {
     // return true if no trees hav no lower trees (is the highest branch of family tree)
-    for (let tree of treeList) {
+    if (treeList === []) {
+        return true
+    }
+    for (tree of treeList) {
         for (person of tree.names) {
             if (person.subtree !== []) {
                 return false
@@ -190,7 +191,7 @@ function renderForm() {
 
         for (let tree of treeList) {
             for (let person of tree.names) {
-                newTreeList = newTreeList + person.subtree
+                newTreeList = newTreeList.concat(person.subtree)
 
                 const personDiv = document.createElement('div')
                 personDiv.className = 'person-div'
@@ -238,8 +239,6 @@ function renderForm() {
                 deleteButton.id = 'delete-button'
                 deleteButton.addEventListener('click', function() {deleteUser(person)})
                 personDiv.appendChild(deleteButton)
-
-                // gotta do all this for spouse? would abstracting out mess up calls?
             }
         }
         treeList = newTreeList
@@ -302,8 +301,7 @@ function main() {
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
         renderPage()
-        // somewhere gotta read prev data from db, then read data into db (SAVE button somewhere)
-        rootTree.addName(tree.creator_name)
+        rootTree.addName(new Person(tree.creator_name))
         renderForm()
     });
 } ;
