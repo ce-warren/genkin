@@ -6,7 +6,7 @@ const TreeModelSchema = new mongoose.Schema ({
   creator_id    : String,
   creator_name  : String,
   contributor_names: Array,
-  tree_object   : Array,
+  names   : Array, //of person objects - the automated IDs
   public        : Boolean,
 });
 // how to represent a "tree object"? (i.e. the actual data structure)

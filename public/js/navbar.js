@@ -15,7 +15,7 @@ function renderNavbar(user) {
   const navbarDiv = document.getElementById('nav-item-container');
 
   const navBrands = document.getElementsByClassName('navbar-brand')
-  for (brand of navBrands) {
+  for (let brand of navBrands) {
     brand.addEventListener('click', headingEventListener)
   }
 
