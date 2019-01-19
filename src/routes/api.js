@@ -9,6 +9,7 @@ const Image = require('../models/image');
 const Video = require('../models/video');
 const Audio = require('../models/audio');
 const Text = require('../models/text');
+const Person = require('../models/person');
 
 const router = express.Router();
 
@@ -26,6 +27,13 @@ router.get('/whoami', function(req, res) {
 router.get('/user', function(req, res) {
   User.findOne({_id: req.query._id}, function(err, user) {
     res.send(user);
+  });
+});
+
+//person
+router.get('/person', function(req, res) {
+  Person.findOne({_id: req.query._id}, function(err, person) {
+    res.send(person);
   });
 });
 
