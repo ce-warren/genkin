@@ -30,11 +30,15 @@ router.get('/user', function(req, res) {
 });
 
 // trees
+let index = 0;
 router.get('/public-trees', function(req, res) {
   Tree.find({public: true}, function(err, trees) {
     res.send(trees);
-  });
+    index += 4;
+  }).skip(index).limit(4);
 });
+
+
 
 router.get('/user-trees', function(req, res) {
   Tree.find({creator_id: req.query.creator_id}, function(err, trees) {

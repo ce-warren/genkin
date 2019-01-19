@@ -1,3 +1,36 @@
+// Start with first post.
+let counter = 0;
+
+// Load posts 20 at a time.
+const quantity = 10;
+
+//variable declaring if all the database entries have been loaded
+let complete = false;
+
+// When DOM loads, render the first 20 posts.
+document.addEventListener('DOMContentLoaded', load);
+
+// If scrolled to bottom, load the next 20 posts.
+window.onscroll = () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) { //if at the bottom of the page, load the next 10 posts
+    if (!complete){
+      complete = load(complete); //only carries out load when there are more
+    }
+  }
+};
+
+// Load next set of posts.
+function load(finished) {
+
+  // Set start and end post numbers, and update counter.
+  const start = counter;
+  const end = start + quantity - 1;
+  counter = end + 1;
+
+  finished = renderTreeCards(start, end, finished);
+  return finished;
+};
+
 function treeDOMObject(treeJSON) {
   const card = document.createElement('div');
   card.setAttribute('id', treeJSON._id);
@@ -37,18 +70,13 @@ function treeDOMObject(treeJSON) {
   return card;
 }
 
-function renderTreeCards() {
+function renderTreeCards(start, end, finished) {
   const treesDiv = document.getElementById('trees-container');
   get('/api/public-trees', {'public': true}, function(treesArr) {
       for (let i = 0; i < treesArr.length; i++) {
           const currentTree = treesArr[i];
-          treesDiv.prepend(treeDOMObject(currentTree));
+          treesDiv.appendChild(treeDOMObject(currentTree));
       };
   });
+  return finished; //Boolean variable that dictates whether or not all of the posts have been loaded 
 };
-
-function main() {
-  renderTreeCards();
-};
-
-main();
