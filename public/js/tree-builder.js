@@ -33,7 +33,7 @@ class Person {
     }
 
     removeSubtree(index) {
-        this.subtrees.splice(index,1)
+        this.subtree.splice(index,1)
     }
 
     addPhoto(photo) {
@@ -131,10 +131,44 @@ function renderGraph(current_id, root) {
     }
 }
 
+
 function newGraph
+
+function checkForChildren(treeList) {
+    // return true if no trees hav no lower trees (is the highest branch of family tree)
+    for (tree of treeList) {
+        for (person of tree.names) {
+            if (!this.subtree === []) {
+                return false
+            }
+        }
+    }
+    return true
+}
 
 function renderForm() {
     const form = document.getElementById('form')
+    let treeList = [rootTree]
+    ind = 0
+
+    do {
+        let newTreeList = []
+        ind += 1
+        const generation = document.createElement('div')
+        generation.id = 'gen-' + ind
+        generation.className = 'generation'
+        form.append(generation)
+
+        for (tree of treeList) {
+            for (person of tree.names) {
+                newTreeList = newTreeList + person.subtree
+                const inputBox = document.createElement('input')
+                inputBox.type = 'text'
+                inputBox.value = person.name
+            }
+        }
+    }
+    while (checkForChildren(treeList));
 
     renderGraph()
 }
@@ -147,7 +181,7 @@ function main() {
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
         renderPage()
-
+        // somewhere gotta read prev data from db, then read data into db (SAVE button somewhere)
         rootTree.addName(tree.creator_name)
         renderForm()
     });
