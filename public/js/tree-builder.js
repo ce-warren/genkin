@@ -171,6 +171,10 @@ function deleteUser(person) {
 
 }
 
+function createPersonDiv(person) {
+
+}
+
 function renderForm() {
     const form = document.getElementById('form')
     let treeList = [rootTree]
@@ -234,6 +238,8 @@ function renderForm() {
                 deleteButton.id = 'delete-button'
                 deleteButton.addEventListener('click', function() {deleteUser(person)})
                 personDiv.appendChild(deleteButton)
+
+                // gotta do all this for spouse? would abstracting out mess up calls?
             }
         }
         treeList = newTreeList
@@ -241,6 +247,10 @@ function renderForm() {
     while (checkForChildren(treeList));
 
     renderGraph()
+}
+
+function renderMediaGallery() {
+       
 }
 
 let rootTree = new Tree()

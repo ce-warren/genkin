@@ -56,12 +56,12 @@ router.post('/person', connect.ensureLoggedIn(), function(req, res) {
 );
 
 // trees
-let index = 0;
+let index = 0; // uh this is never gonna work, just pass in a parameter
 router.get('/public-trees', function(req, res) {
   Tree.find({public: true}, function(err, trees) {
     res.send(trees);
-    index += 4;
-  }).skip(index).limit(4);
+    index += 10;
+  }).skip(index).limit(10);
 });
 
 router.get('/user-trees', function(req, res) {
