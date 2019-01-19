@@ -94,9 +94,11 @@ function renderPage() {
     lowerDiv.className = 'row'
 
     const form = document.createElement('div')
+    form.id = 'form'
     form.className = 'col-4'
     lowerDiv.appendChild(form)
     const graph = document.createElement('div')
+    graph.id = 'graph'
     graph.className = 'col-8'
     lowerDiv.appendChild(graph)
 
@@ -108,7 +110,6 @@ function renderGraph() {
 }
 
 function renderForm(name) {
-
 
     renderGraph()
 }
