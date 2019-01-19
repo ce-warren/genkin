@@ -56,9 +56,9 @@ router.post('/tree', connect.ensureLoggedIn(), function(req, res) {
     const newTree = new Tree({
       'creator_id': req.user._id,
       'creator_name': req.user.name,
-      'contributor_names': [], //why?
-      'tree_object': [], 
-      'public': true
+      'contributor_names': [],
+      'tree_object': [],
+      'public': req.query.public
     });
   
     newTree.save(function(err,tree) {
