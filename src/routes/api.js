@@ -52,8 +52,7 @@ router.post('/person', connect.ensureLoggedIn(), function(req, res) {
     if (err) console.log(err);
   });
   res.send(newPerson);
-}
-);
+});
 
 // trees
 let index = 0; // uh this is never gonna work, just pass in a parameter

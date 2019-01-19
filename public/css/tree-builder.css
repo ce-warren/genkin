@@ -6,3 +6,63 @@
 .nav-item:hover {
     cursor: pointer;
 }
+
+.generation {
+    border: solid;
+    border-color: #212529;
+    border-width: 2px;
+    border-radius: 10px;
+    margin-top: .7rem;
+    padding: 5px;
+}
+
+.input {
+    display: block;
+}
+
+.person-div {
+    margin-top: .4rem
+}
+
+button {
+    background-image:linear-gradient(#FFCB7E,#F1AB5E);
+    border: solid;
+    border-color: #212529;
+    border-width: 2px;
+    margin-top: .2rem!important;
+    margin-bottom: .2rem!important;
+    box-shadow: 1px 1px 2px #666;
+    font-size: 12px;
+    margin:5%;
+    width: 40%;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+#partner-button-inactive {
+    background-image: linear-gradient(#ccc, #aaa)
+}
+
+#partner-button-inactive:hover {
+    cursor: not-allowed
+}
+
+input {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    border:solid;
+    border-width: 2px;
+    border-color: #212529;
+    box-shadow: 1px 1px 2px #666;
+    font-size: 20px;
+    padding-left: 5px;
+    padding-right: 5px
+}
+
+#form {
+    overflow: scroll;
+    height: 500px;
+}
