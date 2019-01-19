@@ -1,35 +1,99 @@
-// + button to add ring (create new html object or just change visual on singe object?)
+class Tree {
+    constructor() {
+        this.names = [] // array of Person objects
+    }
 
-// name button to allow name input (?) - maybe click ring to add new name, double-click to edit name?
+    addName(name) {
+        this.names.append(name)
+    }
 
-// media button to add media
+    removeName(name) {
+        for (i in this.names) {
+            if (this.names[i] === name) {
+                this.names.splice(i,1)
+                break
+            }
+        }
+    }
+}
 
-// render AR/VR buttons (take to another page with reroute? but also pass in data for specific tree)
-// - really just make the buttons links
-// do this thing again: creatorSpan.setAttribute('href', '/u/profile?' + storyJSON.creator_id);
+class Person {
+    constructor(_name) {
+        this.name = _name
+        this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
+        this.photos = []
+        this.videos = []
+        this.audios = []
+        this.texts = []
+    }
 
-// actually render the whole thing
+    addSubtree() {
+        this.subtree.append(new Tree)
+    }
 
-function renderTree(tree) {
+    removeSubtree(index) {
+        this.subtrees.splice(index,1)
+    }
 
-    // wait and see about exact data structure - below no longer works
+    addPhoto(photo) {
+        this.photos.append(photo)
+    }
 
-    /* let treeRings = [[tree.names, tree.mediaDict]];
-    let thisTree = tree;
-    while (thisTree.child !== undefined) {
-        treeRings.append([thisTree.names, thisTree.mediaDict]);
-        thisTree = thisTree.child;
-    }; */
+    removePhoto(photo) {
+        for (i in this.photos) {
+            if (this.photos[i] === photo) {
+                this.photos.splice(i,1)
+                break
+            }
+        }
+    }
 
-    // graphics - depends on how the AR stuff works, should it be in HTML circle divs? how would text work?
-};
+    addVideo(video) {
+        this.videos.append(video)
+    }
+
+    removeVideo(video) {
+        for (i in this.videos) {
+            if (this.videos[i] === video) {
+                this.videos.splice(i,1)
+                break
+            }
+        }
+    }
+
+    addAudio(audio) {
+        this.audios.append(audio)
+    }
+
+    removeAudio(audio) {
+        for (i in this.audios) {
+            if (this.audios[i] === audio) {
+                this.audios.splice(i,1)
+                break
+            }
+        }
+    }
+
+    addText(text) {
+        this.texts.append(text)
+    }
+
+    removeText(text) {
+        for (i in this.texts) {
+            if (this.texts[i] === text) {
+                this.texts.splice(i,1)
+                break
+            }
+        }
+    }
+}
 
 function main() {
     const treeId = window.location.search.substring(1);
     get('/api/tree', {'_id': treeId}, function(tree) {
-        renderTree(tree.tree_object);
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
+        ///let treeObject = 
     });
 } ;
 
