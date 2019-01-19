@@ -88,12 +88,40 @@ class Person {
     }
 }
 
+function renderPage() {
+    const container = document.getElementById('main-container')
+    const lowerDiv = document.createElement('div')
+    lowerDiv.className = 'row'
+
+    const form = document.createElement('div')
+    form.className = 'col-4'
+    lowerDiv.appendChild(form)
+    const graph = document.createElement('div')
+    graph.className = 'col-8'
+    lowerDiv.appendChild(graph)
+
+    container.appendChild(lowerDiv)
+}
+
+function renderGraph() {
+
+}
+
+function renderForm(name) {
+
+
+    renderGraph()
+}
+
 function main() {
     const treeId = window.location.search.substring(1);
     get('/api/tree', {'_id': treeId}, function(tree) {
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
-        ///let treeObject = 
+        renderPage()
+        renderForm()
+        let rootTree = new Tree
+        tree.addName()
     });
 } ;
 
