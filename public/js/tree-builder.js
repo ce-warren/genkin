@@ -18,8 +18,9 @@ class Tree {
 }
 
 class Person {
-    constructor(_name) {
-        this.name = _name
+    constructor(_name, partner) {
+        this.name = _name;
+        this.partner = partner;
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
         this.videos = []
@@ -86,6 +87,10 @@ class Person {
             }
         }
     }
+
+    hasParent() {
+        return this.subtree.length > 0; //if the Person has parents to be represented in the subtree
+    }
 }
 
 function renderPage() {
@@ -105,14 +110,21 @@ function renderPage() {
     container.appendChild(lowerDiv)
 }
 
-function renderGraph() {
+function renderGraph(current_id, root) {
+    //the initial current_id is graph
+    //the global variable is rootTree
+    //currently, the tree is being rebuilt with each submission
 
     const area = document.getElementById(current_id); //the parent graph
     const current_graph = document.createElement('ul');
     for (let i of rootTree.names) {
         const newLevel = document.createElement('li');
         newLevel.innerText = i.name;
-
+        if (this.hasParent()) {
+            //recursively creates a new list
+            newLevel.setAttribute('id', current_id+count.toString());
+            renderGraph()
+        }
 
     }
 }
