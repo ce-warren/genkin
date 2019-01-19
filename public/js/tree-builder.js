@@ -1,3 +1,5 @@
+import { prependOnceListener } from "cluster";
+
 class Tree {
     constructor() {
         this.names = [] // array of Person objects
@@ -18,9 +20,9 @@ class Tree {
 }
 
 class Person {
-    constructor(_name, partner) {
+    constructor(_name) {
         this.name = _name;
-        this.partner = partner;
+        this.partner = undefined;
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
         this.videos = []
@@ -133,7 +135,7 @@ function checkForChildren(treeList) {
     // return true if no trees hav no lower trees (is the highest branch of family tree)
     for (tree of treeList) {
         for (person of tree.names) {
-            if (!this.subtree === []) {
+            if (person.subtree !== []) {
                 return false
             }
         }
@@ -142,6 +144,22 @@ function checkForChildren(treeList) {
 }
 
 function addMedia(person) {
+
+}
+
+function addPartner(person) {
+
+}
+
+function addSibling(person) {
+
+}
+
+function addParent(person) {
+
+}
+
+function deleteUser(person) {
 
 }
 
@@ -161,14 +179,56 @@ function renderForm() {
         for (tree of treeList) {
             for (person of tree.names) {
                 newTreeList = newTreeList + person.subtree
+
+                const personDiv = document.createElement('div')
+                personDiv.className = 'person-div'
+                generation.appendChild(personDiv)
+
                 const inputBox = document.createElement('input')
                 inputBox.type = 'text'
                 inputBox.value = person.name
+                personDiv.appendChild(inputBox)
+
+                const nameButton = document.createElement('button')
+                nameButton.id = 'name-button'
+                nameButton.value = 'Change Name'
+                nameButton.addEventListener('click', function () {changeName(inputBox.value)})
+                personDiv.appendChild(nameButton)
+
                 const mediaButton = document.createElement('button')
                 mediaButton.value = 'Add Media'
-                mediaButton.addEventListener('click', function() {addMeida(person)})
+                mediaButton.id = 'media-button'
+                mediaButton.addEventListener('click', function() {addMedia(person)})
+                personDiv.appendChild(mediaButton)
+
+                const parentButton = document.createElement('button')
+                parentButton.value = 'Add Parent'
+                parentButton.id = 'parent-button'
+                parentButton.addEventListener('click', function() {addParent(person)})
+                personDiv.appendChild(parentButton)
+
+                if (person.partner !== undefined) {
+                    const partnerButton = document.createElement('button')
+                    partnerButton.value = 'Add Partner'
+                    partnerButton.id = 'partner-button'
+                    partnerButton.addEventListener('click', function() {addPartner(person)})
+                    personDiv.append(partnerButton)
+                }
+
+                const siblingButton = document.createElement('button')
+                siblingButton.value = 'Add Sibling'
+                siblingButton.id = 'sibling-button'
+                siblingButton.addEventListener('click', function() {addSibling(person)})
+                personDiv.appendChild(siblingButton)
+
+                const deleteButton = document.createElement('button')
+                deleteButton.value = 'Delete This Person'
+                deleteButton.id = 'delete-button'
+                deleteButton.addEventListener('click', function() {deleteUser(person)})
+                personDiv.appendChild(deleteButton)
             }
         }
+        treeList = newTreeList
     }
     while (checkForChildren(treeList));
 
