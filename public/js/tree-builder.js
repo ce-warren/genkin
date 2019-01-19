@@ -1,6 +1,6 @@
 class Tree {
     constructor() {
-        this.names = [] // array of Person objects
+        this.names = [] // array of Person objects - siblings
     }
 
     addName(name) {
@@ -18,8 +18,9 @@ class Tree {
 }
 
 class Person {
-    constructor(_name) {
+    constructor(_name, partner) {
         this.name = _name
+        this.partner = partner;
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
         this.videos = []
@@ -105,8 +106,21 @@ function renderPage() {
     container.appendChild(lowerDiv)
 }
 
-function renderGraph() {
+let count = 0 //appended to graph id to specify the level of the graph
 
+function renderGraph(current_id) {
+    //the initial current_id is graph
+    //the global variable is rootTree
+    //currently, the tree is being rebuilt with each submission
+
+    const area = document.getElementById(current_id); //the parent graph
+    const current_graph = document.createElement('ul');
+    for (let i of rootTree.names) {
+        const newLevel = document.createElement('li');
+        newLevel.innerText = i.name;
+
+
+    }
 }
 
 function renderForm(name) {
