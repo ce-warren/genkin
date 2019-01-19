@@ -1,10 +1,10 @@
 class Tree {
     constructor() {
-        this.names = [] // array of Person objects - siblings
+        this.names = [] // array of Person objects
     }
 
     addName(name) {
-        this.names.append(name)
+        this.names.push(name)
     }
 
     removeName(name) {
@@ -18,9 +18,8 @@ class Tree {
 }
 
 class Person {
-    constructor(_name, partner) {
+    constructor(_name) {
         this.name = _name
-        this.partner = partner;
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
         this.videos = []
@@ -29,7 +28,7 @@ class Person {
     }
 
     addSubtree() {
-        this.subtree.append(new Tree)
+        this.subtree.push(new Tree)
     }
 
     removeSubtree(index) {
@@ -37,7 +36,7 @@ class Person {
     }
 
     addPhoto(photo) {
-        this.photos.append(photo)
+        this.photos.push(photo)
     }
 
     removePhoto(photo) {
@@ -50,7 +49,7 @@ class Person {
     }
 
     addVideo(video) {
-        this.videos.append(video)
+        this.videos.push(video)
     }
 
     removeVideo(video) {
@@ -63,7 +62,7 @@ class Person {
     }
 
     addAudio(audio) {
-        this.audios.append(audio)
+        this.audios.push(audio)
     }
 
     removeAudio(audio) {
@@ -76,7 +75,7 @@ class Person {
     }
 
     addText(text) {
-        this.texts.append(text)
+        this.texts.push(text)
     }
 
     removeText(text) {
@@ -106,12 +105,7 @@ function renderPage() {
     container.appendChild(lowerDiv)
 }
 
-let count = 0 //appended to graph id to specify the level of the graph
-
-function renderGraph(current_id) {
-    //the initial current_id is graph
-    //the global variable is rootTree
-    //currently, the tree is being rebuilt with each submission
+function renderGraph() {
 
     const area = document.getElementById(current_id); //the parent graph
     const current_graph = document.createElement('ul');
@@ -135,6 +129,10 @@ function checkForChildren(treeList) {
     return true
 }
 
+function addMedia(person) {
+
+}
+
 function renderForm() {
     const form = document.getElementById('form')
     let treeList = [rootTree]
@@ -146,7 +144,7 @@ function renderForm() {
         const generation = document.createElement('div')
         generation.id = 'gen-' + ind
         generation.className = 'generation'
-        form.append(generation)
+        form.appendChild(generation)
 
         for (tree of treeList) {
             for (person of tree.names) {
@@ -154,6 +152,9 @@ function renderForm() {
                 const inputBox = document.createElement('input')
                 inputBox.type = 'text'
                 inputBox.value = person.name
+                const mediaButton = document.createElement('button')
+                mediaButton.value = 'Add Media'
+                mediaButton.addEventListener('click', function() {addMeida(person)})
             }
         }
     }
