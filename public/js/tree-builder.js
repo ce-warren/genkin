@@ -22,7 +22,7 @@ class Tree {
 class Person {
     constructor(_name) {
         this.name = _name;
-        this.partner = undefined;
+        this.partner = '';
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
         this.videos = []
@@ -219,7 +219,7 @@ function renderForm() {
                 parentButton.addEventListener('click', function() {addParent(person)})
                 personDiv.appendChild(parentButton)
 
-                if (person.partner !== undefined) {
+                if (person.partner !== '') {
                     const partnerButton = document.createElement('button')
                     partnerButton.value = 'Add Partner'
                     partnerButton.id = 'partner-button'
@@ -272,7 +272,7 @@ function getTree(tree) {
                 })
             }
 
-            if (p.partner !== undefined) {
+            if (p.partner !== '') {
                 get('/api/person', { '_id:': i }, function (person) {
                     let a = new Person(person.name);
                     a.partner = person.partner;
@@ -283,12 +283,12 @@ function getTree(tree) {
                     for (let j of p.subtree) {
                         get('/api/tree', { '_id': j }, function (tree2) {
                             a.subtree = getTree(tree2);
-        
                         })
                     }
                 })
                 p.partner = a;
-        
+                a.partner = p;
+                newTree.addName(a)
             }
             newTree.addName(p);
         }) 

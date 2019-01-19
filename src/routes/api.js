@@ -40,7 +40,7 @@ router.get('/person', function(req, res) {
 router.post('/person', connect.ensureLoggedIn(), function(req, res) {
   const newPerson = new Person({
     'name': req.body.name,
-    'partner': undefined,
+    'partner': '',
     'subtree': [],
     'photos' : [],
     'videos' : [],
@@ -81,8 +81,8 @@ router.post('/tree', connect.ensureLoggedIn(), function(req, res) {
       'creator_id': req.user._id,
       'creator_name': req.user.name,
       'contributor_names': [],
-      'tree_object': [],
-      'public': req.query.public
+      'names': [],
+      'public': req.body.public
     });
   
     newTree.save(function(err,tree) {

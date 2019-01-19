@@ -1,5 +1,5 @@
 function createTree() {
-    post('/api/tree', {}, function(tree) {
+    post('/api/tree', {'public': true}, function(tree) {
         window.location.assign('/tree-builder?' + tree._id);
     });
 };
