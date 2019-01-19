@@ -109,10 +109,13 @@ function renderGraph() {
 
 }
 
-function renderForm(name) {
+function renderForm() {
+    const form = document.getElementById('form')
 
     renderGraph()
 }
+
+let rootTree = new Tree()
 
 function main() {
     const treeId = window.location.search.substring(1);
@@ -120,9 +123,9 @@ function main() {
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
         renderPage()
+
+        rootTree.addName(tree.creator_name)
         renderForm()
-        let rootTree = new Tree
-        tree.addName()
     });
 } ;
 
