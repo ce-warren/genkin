@@ -9,6 +9,7 @@ const Image = require('../models/image');
 const Video = require('../models/video');
 const Audio = require('../models/audio');
 const Text = require('../models/text');
+const Person = require('../models/person');
 
 const router = express.Router();
 
@@ -29,16 +30,39 @@ router.get('/user', function(req, res) {
   });
 });
 
+//person
+router.get('/person', function(req, res) {
+  Person.findOne({_id: req.query._id}, function(err, person) {
+    res.send(person);
+  });
+});
+
+router.post('/person', connect.ensureLoggedIn(), function(req, res) {
+  const newPerson = new Person({
+    'name': req.body.name,
+    'partner': undefined,
+    'subtree': [],
+    'photos' : [],
+    'videos' : [],
+    'audios' : [],
+    'texts': []
+  });
+
+  newPerson.save(function(err,person) {
+    if (err) console.log(err);
+  });
+  res.send(newPerson);
+}
+);
+
 // trees
-let index = 0;
+let index = 0; // uh this is never gonna work, just pass in a parameter
 router.get('/public-trees', function(req, res) {
   Tree.find({public: true}, function(err, trees) {
     res.send(trees);
-    index += 4;
-  }).skip(index).limit(4);
+    index += 10;
+  }).skip(index).limit(10);
 });
-
-
 
 router.get('/user-trees', function(req, res) {
   Tree.find({creator_id: req.query.creator_id}, function(err, trees) {
