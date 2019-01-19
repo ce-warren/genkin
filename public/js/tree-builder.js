@@ -246,7 +246,44 @@ function renderForm() {
 let rootTree = new Tree()
 
 function getTree(tree) {
+    //transforms tree models into Tree objects
+    newTree = new Tree();
+    for (let i of tree.names) {
+        get('/api/person', {'_id:': i}, function(person){
+            let p = new Person(person.name);
+            p.partner = person.partner;
+            p.photos = person.photos;
+            p.videos = person.videos;
+            p.audios = person.audios;
+            p.texts = person.texts;
+            for (let j of p.subtree) {
+                get('/api/tree', {'_id':j}, function(tree2) {
+                    p.subtree = getTree(tree2);
+                })
+            }
 
+            if (p.partner !== undefined) {
+                get('/api/person', { '_id:': i }, function (person) {
+                    let a = new Person(person.name);
+                    a.partner = person.partner;
+                    a.photos = person.photos;
+                    a.videos = person.videos;
+                    a.audios = person.audios;
+                    a.texts = person.texts;
+                    for (let j of p.subtree) {
+                        get('/api/tree', { '_id': j }, function (tree2) {
+                            a.subtree = getTree(tree2);
+        
+                        })
+                    }
+                })
+                p.partner = a;
+        
+            }
+            newTree.addName(p);
+        }) 
+    }
+    return newTree;
 }
 
 function main() {
