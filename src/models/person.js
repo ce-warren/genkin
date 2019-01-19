@@ -9,6 +9,7 @@ const PersonModelSchema = new mongoose.Schema({
     photos : Array,
     videos : Array,
     audios : Array,
+    texts: Array
 });
 // how to represent a "tree object"? (i.e. the actual data structure)
 

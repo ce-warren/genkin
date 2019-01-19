@@ -37,6 +37,24 @@ router.get('/person', function(req, res) {
   });
 });
 
+router.post('/person', connect.ensureLoggedIn(), function(req, res) {
+  const newPerson = new Person({
+    'name': req.body.name,
+    'partner': undefined,
+    'subtree': [],
+    'photos' : [],
+    'videos' : [],
+    'audios' : [],
+    'texts': []
+  });
+
+  newPerson.save(function(err,person) {
+    if (err) console.log(err);
+  });
+  res.send(newPerson);
+}
+);
+
 // trees
 let index = 0;
 router.get('/public-trees', function(req, res) {
@@ -45,8 +63,6 @@ router.get('/public-trees', function(req, res) {
     index += 4;
   }).skip(index).limit(4);
 });
-
-
 
 router.get('/user-trees', function(req, res) {
   Tree.find({creator_id: req.query.creator_id}, function(err, trees) {
