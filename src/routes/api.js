@@ -39,7 +39,7 @@ router.get('/person', function(req, res) {
 
 router.post('/person', connect.ensureLoggedIn(), function(req, res) {
   const newPerson = new Person({
-    'name': req.body.name,
+    'name': req.body.name, //why is this not passed in?
     'partner': '',
     'subtree': [],
     'photos' : [],

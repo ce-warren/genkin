@@ -295,6 +295,7 @@ function getTree(tree) {
     return newTree;
 }
 
+
 function main() {
     const treeId = window.location.search.substring(1);
     get('/api/tree', {'_id': treeId}, function(tree) {
