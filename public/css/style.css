@@ -4,7 +4,7 @@ div.home-data{
     margin-left: 25%;
     margin-right: 25%;
     overflow: hidden;
-    padding: .5rem;
+    padding: 1rem;
     align-items: center;
     justify-content: space-around;
     display: flex;
@@ -52,4 +52,12 @@ body {
 #navbar-id {
   box-shadow: 0px 0px 5px;
   background-image: linear-gradient(#A0522D, #702200)
+}
+
+.navbar-brand:hover{
+  cursor: pointer;
+}
+
+h1 {
+  padding: 10px
 }

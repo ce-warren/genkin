@@ -10,7 +10,8 @@
     color:black;
     font-size: 3rem;
     text-shadow: 3px 3px 1px #eee, -3px 3px 1px #eee, 3px -3px 1px #eee, -3px -3px 1px #eee;
-    margin-bottom: 30%
+    margin-bottom: 30%;
+    height: 20rem;
 }
 
 .nav-button:hover {

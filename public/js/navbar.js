@@ -7,8 +7,17 @@ function newNavbarItem(text, url) {
   return itemLink;
 }
 
+function headingEventListener() {
+  window.location.assign('/')
+}
+
 function renderNavbar(user) {
   const navbarDiv = document.getElementById('nav-item-container');
+
+  const navBrands = document.getElementsByClassName('navbar-brand')
+  for (brand of navBrands) {
+    brand.addEventListener('click', headingEventListener)
+  }
 
   navbarDiv.appendChild(newNavbarItem('Home', '/'));
   navbarDiv.appendChild(newNavbarItem('About', '/about'));
@@ -24,6 +33,7 @@ function renderNavbar(user) {
 function main() {
   get('/api/whoami', {}, function(user) {
     renderNavbar(user);
+
   });
 };
 

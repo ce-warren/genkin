@@ -9,9 +9,10 @@
     padding:.5rem;
     border:solid;
     border-width:2px;
-    border-color:black;
+    border-color:#212529;
     margin: 10px;
     text-align: center;
+    box-shadow: 1px 1px 2px #666
 }
 
 .media-nav-item:hover {
@@ -19,15 +20,15 @@
 }
 
 .current-nav-item {
-    background-color:#F1AB5E
+    background-image:linear-gradient(#FFCB7E,#F1AB5E);
 }
 
 .input-area {
     padding: 1rem;
     margin-left: 5rem;
     margin-right: 5rem;
-    margin-top: 2rem;;
-    margin-bottom: 2rem
+    margin-top: 1rem;;
+    margin-bottom: 1rem
 }
 
 .media-holder:hover {
@@ -86,10 +87,46 @@ button:hover {
     animation: spin 2s linear infinite;
     margin-left: 40%;
     margin-right: 40%
-
-  }
+}
   
-  @keyframes spin {
+@keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
-  }
+}
+
+button {
+    background-image:linear-gradient(#FFCB7E,#F1AB5E);
+    border: solid;
+    border-color: #212529;
+    border-width: 2px;
+    margin: .5rem;
+    box-shadow: 1px 1px 2px #666;
+    padding: .5rem
+}
+
+.custom-file-upload {
+    background-image:linear-gradient(#FFCB7E,#F1AB5E);
+    border: solid;
+    border-color: #212529;
+    border-width: 2px;
+    margin: .5rem;
+    box-shadow: 1px 1px 2px #666;
+    padding: .5rem;
+}
+
+.custom-file-upload:hover {
+    cursor: pointer;
+}
+
+input[type=file] {
+    display: none;
+}
+
+textarea {
+    border: solid;
+    border-color: #212529;
+    border-width: 2px;
+    margin: .5rem;
+    box-shadow: 1px 1px 2px #666;
+    padding: .5rem;
+}

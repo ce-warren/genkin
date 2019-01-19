@@ -40,7 +40,7 @@ function showPhotos() {
                 const imageHolder = document.createElement('img')
                 imageHolder.src = 'data:image;base64,' + btoa(image.data)
                 imageHolder.setAttribute('class','photo-holder media-holder')
-                mediaContainer.prepend(imageHolder)
+                mediaContainer.appendChild(imageHolder)
             }
             loader.className = ''
         }
@@ -51,7 +51,13 @@ function showPhotos() {
     // create upload button
     const inputArea = document.createElement('div')
     inputArea.setAttribute('class','input-area')
-    mediaContainer.appendChild(inputArea)
+    mediaContainer.prepend(inputArea)
+
+    const label = document.createElement('label')
+    label.setAttribute('for', 'upload-selector')
+    label.className = 'custom-file-upload'
+    label.innerHTML = 'Select File'
+    inputArea.appendChild(label)
 
     const inputField = document.createElement('input');
     inputField.type = 'file';
@@ -110,7 +116,7 @@ function showVideos() {
                 videoSource.type = video.type
                 videoHolder.appendChild(videoSource)
                 videoHolder.setAttribute('class','video-holder media-holder')
-                mediaContainer.prepend(videoHolder)
+                mediaContainer.appendChild(videoHolder)
             }
             loader.className = ''
         }
@@ -121,7 +127,13 @@ function showVideos() {
     // create upload button
     const inputArea = document.createElement('div')
     inputArea.setAttribute('class','input-area')
-    mediaContainer.appendChild(inputArea)
+    mediaContainer.prepend(inputArea)
+
+    const label = document.createElement('label')
+    label.setAttribute('for', 'upload-selector')
+    label.className = 'custom-file-upload'
+    label.innerHTML = 'Select File'
+    inputArea.appendChild(label)
 
     const inputField = document.createElement('input');
     inputField.type = 'file';
@@ -193,7 +205,7 @@ function showMusic() {
                 audioSource.type = audio.type
                 audioHolder.appendChild(audioSource)
                 audioHolder.setAttribute('class','audio-holder media-holder')
-                mediaContainer.prepend(audioHolder)
+                mediaContainer.appendChild(audioHolder)
             }
             loader.className = ''
         }
@@ -204,7 +216,13 @@ function showMusic() {
     // create upload button
     const inputArea = document.createElement('div')
     inputArea.setAttribute('class','input-area')
-    mediaContainer.appendChild(inputArea)
+    mediaContainer.prepend(inputArea)
+
+    const label = document.createElement('label')
+    label.setAttribute('for', 'upload-selector')
+    label.className = 'custom-file-upload'
+    label.innerHTML = 'Select File'
+    inputArea.appendChild(label)
 
     const inputField = document.createElement('input');
     inputField.type = 'file';
@@ -275,7 +293,7 @@ function showText() {
                     textHolder.appendChild(textP)
                 }
                 textHolder.setAttribute('class','text-holder media-holder')
-                mediaContainer.prepend(textHolder)
+                mediaContainer.appendChild(textHolder)
             }
             loader.className = ''
         }
@@ -293,7 +311,13 @@ function showText() {
     inputField2.name = 'Upload';
     inputField2.id = 'upload-selector';
     inputField2.accept = '.txt'
-    inputArea.appendChild(inputField2);
+    inputArea.prepend(inputField2);
+
+    const label = document.createElement('label')
+    label.setAttribute('for', 'upload-selector')
+    label.className = 'custom-file-upload'
+    label.innerHTML = 'Select File'
+    inputArea.appendChild(label)
 
     const button2 = document.createElement('button');
     button2.innerHTML = 'Upload Text File';
