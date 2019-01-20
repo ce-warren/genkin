@@ -1,3 +1,4 @@
+//resetting the default each time the page is reloaded
 // dependencies
 const express = require('express');
 const connect = require('connect-ensure-login');
@@ -55,13 +56,14 @@ router.post('/person', connect.ensureLoggedIn(), function(req, res) {
 });
 
 // trees
-let index = 0; // uh this is never gonna work, just pass in a parameter
+let initial = 0
 router.get('/public-trees', function(req, res) {
-  Tree.find({public: true}, function(err, trees) {
+  let index = req.query.to_skip;
+  let q = Tree.find({public: req.query.public}, function(err, trees) {
     res.send(trees);
-    index += 10;
-  }).skip(index).limit(10);
-  console.log(index)
+  });   
+  q.skip(parseInt(index)).limit(10);
+  q.exec();
 });
 
 router.get('/user-trees', function(req, res) {

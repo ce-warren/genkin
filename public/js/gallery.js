@@ -38,7 +38,7 @@ function load() {
   counter = end + 1;
 
   if (!finished) {
-    renderTreeCards();
+    renderTreeCards(start);
   }
 
   console.log(finished)
@@ -83,9 +83,10 @@ function treeDOMObject(treeJSON) {
   return card;
 }
 
-function renderTreeCards() {
+function renderTreeCards(start) {
   const treesDiv = document.getElementById('trees-container');
-  get('/api/public-trees', {'public': true}, function(treesArr) {
+  console.log(start)
+  get('/api/public-trees', {'public': true, 'to_skip': start}, function(treesArr) {
       for (let i = 0; i < treesArr.length; i++) {
           const currentTree = treesArr[i];
           treesDiv.appendChild(treeDOMObject(currentTree));
