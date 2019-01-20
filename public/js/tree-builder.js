@@ -8,7 +8,7 @@ class Tree {
     }
 
     removeName(name) {
-        for (let i in this.names) {
+        for (i in this.names) {
             if (this.names[i] === name) {
                 this.names.splice(i,1);
                 break;
@@ -28,8 +28,8 @@ class Person {
         this.texts = []
     }
 
-    addSubtree() {
-        this.subtree.push(new Tree)
+    addSubtree(tree) {
+        this.subtree.push(tree)
     }
 
     removeSubtree(index) {
@@ -41,7 +41,7 @@ class Person {
     }
 
     removePhoto(photo) {
-        for (let i in this.photos) {
+        for (i in this.photos) {
             if (this.photos[i] === photo) {
                 this.photos.splice(i,1)
                 break;
@@ -54,7 +54,7 @@ class Person {
     }
 
     removeVideo(video) {
-        for (let i in this.videos) {
+        for (i in this.videos) {
             if (this.videos[i] === video) {
                 this.videos.splice(i,1)
                 break;
@@ -67,7 +67,7 @@ class Person {
     }
 
     removeAudio(audio) {
-        for (let i in this.audios) {
+        for (i in this.audios) {
             if (this.audios[i] === audio) {
                 this.audios.splice(i,1)
                 break;
@@ -80,7 +80,7 @@ class Person {
     }
 
     removeText(text) {
-        for (let i in this.texts) {
+        for (i in this.texts) {
             if (this.texts[i] === text) {
                 this.texts.splice(i,1)
                 break;
@@ -123,12 +123,12 @@ function renderGraph(current_id, root) {
 
 function newGraph (graph) {
     const level = document.createElement('ul');
-    for (let i of graph.names) {
+    for (i of graph.names) {
         const newLevel = document.createElement('li');
         newLevel.innerText = i.name;
         if (i.hasParent()) {
             //recursively creates a new list
-            for (let j of graph.subtree) {
+            for (j of graph.subtree) {
                 newLevel.appendChild(newGraph(j));
             }   
         }
@@ -138,18 +138,19 @@ function newGraph (graph) {
 }
 
 function checkForChildren(treeList) {
-    // return true if no trees hav no lower trees (is the highest branch of family tree)
-    if (treeList === []) {
-        return true
-    }
+    // return false if no trees hav no lower trees (is the highest branch of family tree)
     for (tree of treeList) {
         for (person of tree.names) {
             if (person.subtree !== []) {
-                return false
+                return true
             }
         }
     }
-    return true
+    return false
+}
+
+function changeName(person) {
+
 }
 
 function addMedia(person) {
@@ -189,8 +190,8 @@ function renderForm() {
         generation.className = 'generation'
         form.appendChild(generation)
 
-        for (let tree of treeList) {
-            for (let person of tree.names) {
+        for (tree of treeList) {
+            for (person of tree.names) {
                 newTreeList = newTreeList.concat(person.subtree)
 
                 const personDiv = document.createElement('div')
@@ -201,41 +202,42 @@ function renderForm() {
                 inputBox.type = 'text'
                 inputBox.value = person.name
                 personDiv.appendChild(inputBox)
+                personDiv.appendChild(document.createElement('br'))
 
                 const nameButton = document.createElement('button')
                 nameButton.id = 'name-button'
-                nameButton.value = 'Change Name'
+                nameButton.innerHTML = 'Change Name'
                 nameButton.addEventListener('click', function () {changeName(inputBox.value)})
                 personDiv.appendChild(nameButton)
 
                 const mediaButton = document.createElement('button')
-                mediaButton.value = 'Add Media'
+                mediaButton.innerHTML = 'Add Media'
                 mediaButton.id = 'media-button'
                 mediaButton.addEventListener('click', function() {addMedia(person)})
                 personDiv.appendChild(mediaButton)
 
                 const parentButton = document.createElement('button')
-                parentButton.value = 'Add Parent'
+                parentButton.innerHTML = 'Add Parent'
                 parentButton.id = 'parent-button'
                 parentButton.addEventListener('click', function() {addParent(person)})
                 personDiv.appendChild(parentButton)
 
-                if (person.partner !== '') {
+                if (person.partner === '' || person.partner === null) {
                     const partnerButton = document.createElement('button')
-                    partnerButton.value = 'Add Partner'
+                    partnerButton.innerHTML = 'Add Partner'
                     partnerButton.id = 'partner-button'
                     partnerButton.addEventListener('click', function() {addPartner(person)})
                     personDiv.append(partnerButton)
                 }
 
                 const siblingButton = document.createElement('button')
-                siblingButton.value = 'Add Sibling'
+                siblingButton.innerHTML = 'Add Sibling'
                 siblingButton.id = 'sibling-button'
                 siblingButton.addEventListener('click', function() {addSibling(person)})
                 personDiv.appendChild(siblingButton)
 
                 const deleteButton = document.createElement('button')
-                deleteButton.value = 'Delete This Person'
+                deleteButton.innerHTML = 'Delete This Person'
                 deleteButton.id = 'delete-button'
                 deleteButton.addEventListener('click', function() {deleteUser(person)})
                 personDiv.appendChild(deleteButton)
@@ -245,52 +247,33 @@ function renderForm() {
     }
     while (checkForChildren(treeList));
 
-    renderGraph()
+    //renderGraph()
 }
 
 function renderMediaGallery() {
        
 }
 
-let rootTree = new Tree()
+let rootTree;
 
 function getTree(tree) {
     //transforms tree models into Tree objects
-    newTree = new Tree();
-    for (let i of tree.names) {
-        get('/api/person', {'_id:': i}, function(person){
-            let p = new Person(person.name);
+    let newTree = new Tree();
+    for (i of tree.names) {
+        get('/api/person', {'_id': i}, function(person) {
+            let p = new Person(person.name)
+            newTree.addName(p)
             p.partner = person.partner;
             p.photos = person.photos;
             p.videos = person.videos;
             p.audios = person.audios;
             p.texts = person.texts;
-            for (let j of p.subtree) {
+            for (j of person.subtree) {
                 get('/api/tree', {'_id':j}, function(tree2) {
-                    p.subtree = getTree(tree2);
+                    p.addSubtree(getTree(tree2));
                 })
             }
-
-            if (p.partner !== '') {
-                get('/api/person', { '_id:': i }, function (person) {
-                    let a = new Person(person.name);
-                    a.partner = person.partner;
-                    a.photos = person.photos;
-                    a.videos = person.videos;
-                    a.audios = person.audios;
-                    a.texts = person.texts;
-                    for (let j of p.subtree) {
-                        get('/api/tree', { '_id': j }, function (tree2) {
-                            a.subtree = getTree(tree2);
-                        })
-                    }
-                })
-                p.partner = a;
-                a.partner = p;
-                newTree.addName(a)
-            }
-            newTree.addName(p);
-        }) 
+        })
     }
     return newTree;
 }
@@ -301,8 +284,11 @@ function main() {
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
         renderPage()
-        rootTree.addName(new Person(tree.creator_name))
-        renderForm()
+        rootTree = getTree(tree)
+        
+        const but = document.getElementById("add-nav-button")
+        but.addEventListener('click', renderForm)
+        //renderForm()
     });
 } ;
 
