@@ -222,12 +222,15 @@ function renderForm() {
                 parentButton.addEventListener('click', function() {addParent(person)})
                 personDiv.appendChild(parentButton)
 
+                const partnerButton = document.createElement('button')
+                partnerButton.innerHTML = 'Add Partner'
+                partnerButton.addEventListener('click', function() {addPartner(person)})
+                personDiv.append(partnerButton)
                 if (person.partner === '' || person.partner === null) {
-                    const partnerButton = document.createElement('button')
-                    partnerButton.innerHTML = 'Add Partner'
                     partnerButton.id = 'partner-button'
-                    partnerButton.addEventListener('click', function() {addPartner(person)})
-                    personDiv.append(partnerButton)
+                }
+                else {
+                    partnerButton.id = 'partner-button-inactive'
                 }
 
                 const siblingButton = document.createElement('button')
@@ -278,6 +281,12 @@ function getTree(tree) {
     return newTree;
 }
 
+function renderStuff() {
+    // this is a placeholder function - because of asynchronous stuff, if you call these render functions directly in the
+    // main method, it runs before the data is loaded - unsure how to fix this, so for now, click "Add Generation"
+    renderForm()
+}
+
 function main() {
     const treeId = window.location.search.substring(1);
     get('/api/tree', {'_id': treeId}, function(tree) {
@@ -287,7 +296,7 @@ function main() {
         rootTree = getTree(tree)
         
         const but = document.getElementById("add-nav-button")
-        but.addEventListener('click', renderForm)
+        but.addEventListener('click', renderStuff)
         //renderForm()
     });
 } ;
