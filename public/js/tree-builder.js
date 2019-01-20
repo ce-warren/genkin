@@ -18,8 +18,9 @@ class Tree {
 }
 
 class Person {
-    constructor(_name) {
+    constructor(_name, _id) {
         this.name = _name;
+        this.id = _id
         this.partner = '';
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
@@ -177,6 +178,35 @@ function createPersonDiv(person) {
 
 }
 
+function showButtons(id_) {
+    id = id_.split('-').pop()
+    document.getElementById('name-label-'+id).style.display = 'none'
+    document.getElementById('input-box-'+id).removeAttribute('style')
+    document.getElementById('name-button-'+id).removeAttribute('style')
+    document.getElementById('media-button-'+id).removeAttribute('style')
+    document.getElementById('parent-button-'+id).removeAttribute('style')
+    document.getElementById('partner-button-'+id).removeAttribute('style')
+    document.getElementById('sibling-button-'+id).removeAttribute('style')
+    document.getElementById('delete-button-'+id).removeAttribute('style')
+    document.getElementById('show-button-'+id).style.display = 'none'
+    document.getElementById('hide-button-'+id).removeAttribute('style')
+}
+
+function hideButtons(id_) {
+    id = id_.split('-').pop()
+    document.getElementById('name-label-'+id).removeAttribute('style')
+    document.getElementById('input-box-'+id).style.display = 'none'
+    document.getElementById('name-button-'+id).style.display = 'none'
+    document.getElementById('media-button-'+id).style.display = 'none'
+    document.getElementById('parent-button-'+id).style.display = 'none'
+    document.getElementById('partner-button-'+id).style.display = 'none'
+    document.getElementById('sibling-button-'+id).style.display = 'none'
+    document.getElementById('delete-button-'+id).style.display = 'none'
+    document.getElementById('show-button-'+id).removeAttribute('style')
+    document.getElementById('hide-button-'+id).style.display = 'none'
+    
+}
+
 function renderForm() {
     const form = document.getElementById('form')
     let treeList = [rootTree]
@@ -198,50 +228,85 @@ function renderForm() {
                 personDiv.className = 'person-div'
                 generation.appendChild(personDiv)
 
+                const showButton = document.createElement('h4')
+                showButton.innerHTML = '+'
+                showButton.className = 'show-hide'
+                showButton.id = 'show-button-' + person.id
+                showButton.addEventListener('click', function() {showButtons(showButton.id)})
+                personDiv.append(showButton)
+
+                const hideButton = document.createElement('h4')
+                hideButton.innerHTML = '-'
+                hideButton.className = 'show-hide'
+                hideButton.id = 'hide-button-' + person.id
+                hideButton.style.display = 'none'
+                hideButton.addEventListener('click', function() {hideButtons(showButton.id)})
+                personDiv.append(hideButton)
+
+                const nameLabel = document.createElement('h4')
+                nameLabel.innerHTML = person.name
+                nameLabel.id = 'name-label-' + person.id
+                personDiv.appendChild(nameLabel)
+
                 const inputBox = document.createElement('input')
                 inputBox.type = 'text'
                 inputBox.value = person.name
+                inputBox.style.display = 'none'
+                inputBox.id = 'input-box-' + person.id
+
                 personDiv.appendChild(inputBox)
                 personDiv.appendChild(document.createElement('br'))
 
                 const nameButton = document.createElement('button')
-                nameButton.id = 'name-button'
+                nameButton.className = 'name-button'
+                nameButton.id = 'name-button-' + person.id
                 nameButton.innerHTML = 'Change Name'
+                nameButton.style.display = 'none'
                 nameButton.addEventListener('click', function () {changeName(inputBox.value)})
                 personDiv.appendChild(nameButton)
 
                 const mediaButton = document.createElement('button')
                 mediaButton.innerHTML = 'Add Media'
-                mediaButton.id = 'media-button'
+                mediaButton.className = 'media-button'
+                mediaButton.id = 'media-button-' + person.id
+                mediaButton.style.display = 'none'
                 mediaButton.addEventListener('click', function() {addMedia(person)})
                 personDiv.appendChild(mediaButton)
 
                 const parentButton = document.createElement('button')
                 parentButton.innerHTML = 'Add Parent'
-                parentButton.id = 'parent-button'
+                parentButton.className = 'parent-button'
+                parentButton.id = 'parent-button-' + person.id
+                parentButton.style.display = 'none'
                 parentButton.addEventListener('click', function() {addParent(person)})
                 personDiv.appendChild(parentButton)
 
                 const partnerButton = document.createElement('button')
                 partnerButton.innerHTML = 'Add Partner'
+                partnerButton.id = 'partner-button-' + person.id
                 partnerButton.addEventListener('click', function() {addPartner(person)})
+                partnerButton.style.display = 'none'
                 personDiv.append(partnerButton)
                 if (person.partner === '' || person.partner === null) {
-                    partnerButton.id = 'partner-button'
+                    partnerButton.className = 'partner-button'
                 }
                 else {
-                    partnerButton.id = 'partner-button-inactive'
+                    partnerButton.className = 'partner-button-inactive'
                 }
 
                 const siblingButton = document.createElement('button')
                 siblingButton.innerHTML = 'Add Sibling'
-                siblingButton.id = 'sibling-button'
+                siblingButton.className = 'sibling-button'
+                siblingButton.id = 'sibling-button-' + person.id
+                siblingButton.style.display = 'none'
                 siblingButton.addEventListener('click', function() {addSibling(person)})
                 personDiv.appendChild(siblingButton)
 
                 const deleteButton = document.createElement('button')
                 deleteButton.innerHTML = 'Delete This Person'
-                deleteButton.id = 'delete-button'
+                deleteButton.className = 'delete-button'
+                deleteButton.id = 'delete-button-' + person.id
+                deleteButton.style.display = 'none'
                 deleteButton.addEventListener('click', function() {deleteUser(person)})
                 personDiv.appendChild(deleteButton)
             }
@@ -264,7 +329,7 @@ function getTree(tree) {
     let newTree = new Tree();
     for (i of tree.names) {
         get('/api/person', {'_id': i}, function(person) {
-            let p = new Person(person.name)
+            let p = new Person(person.name, person._id)
             newTree.addName(p)
             p.partner = person.partner;
             p.photos = person.photos;
