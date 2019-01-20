@@ -39,7 +39,7 @@ router.get('/person', function(req, res) {
 
 router.post('/person', connect.ensureLoggedIn(), function(req, res) {
   const newPerson = new Person({
-    'name': req.body.name,
+    'name': req.body.name, //why is this not passed in?
     'partner': '',
     'subtree': [],
     'photos' : [],
@@ -61,6 +61,7 @@ router.get('/public-trees', function(req, res) {
     res.send(trees);
     index += 10;
   }).skip(index).limit(10);
+  console.log(index)
 });
 
 router.get('/user-trees', function(req, res) {

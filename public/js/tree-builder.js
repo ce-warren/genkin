@@ -346,11 +346,13 @@ function getTree(tree) {
     return newTree;
 }
 
+
 function renderStuff() {
     // this is a placeholder function - because of asynchronous stuff, if you call these render functions directly in the
     // main method, it runs before the data is loaded - unsure how to fix this, so for now, click "Add Generation"
     renderForm()
 }
+
 
 function main() {
     const treeId = window.location.search.substring(1);
