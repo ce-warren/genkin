@@ -61,6 +61,7 @@ router.get('/public-trees', function(req, res) {
     res.send(trees);
     index += 10;
   }).skip(index).limit(10);
+  console.log(index)
 });
 
 router.get('/user-trees', function(req, res) {

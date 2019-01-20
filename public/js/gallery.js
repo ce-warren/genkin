@@ -5,7 +5,11 @@ let counter = 0;
 const quantity = 10;
 
 //variable declaring if all the database entries have been loaded
-let complete = false;
+let finished = false;
+
+let final_statement = 0 // keeps track of the number of times the final statement is rendered
+//should only be rendered once and therefore this value checks for this
+
 
 // When DOM loads, render the first 20 posts.
 document.addEventListener('DOMContentLoaded', load);
@@ -13,22 +17,31 @@ document.addEventListener('DOMContentLoaded', load);
 // If scrolled to bottom, load the next 20 posts.
 window.onscroll = () => {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) { //if at the bottom of the page, load the next 10 posts
-    if (!complete){
-      complete = load(complete); //only carries out load when there are more
+    if (!finished) {
+      load()
+    }
+    if (finished && final_statement === 0) {
+      message = document.createElement('p')
+      message.innerText = 'All trees loaded'
+      message.setAttribute('id', 'stop')
+      document.getElementById('trees-container').appendChild(message)
+      final_statement ++
     }
   }
 };
 
 // Load next set of posts.
-function load(finished) {
-
+function load() {
   // Set start and end post numbers, and update counter.
   const start = counter;
   const end = start + quantity - 1;
   counter = end + 1;
 
-  finished = renderTreeCards(start, end, finished);
-  return finished;
+  if (!finished) {
+    renderTreeCards();
+  }
+
+  console.log(finished)
 };
 
 function treeDOMObject(treeJSON) {
@@ -70,13 +83,19 @@ function treeDOMObject(treeJSON) {
   return card;
 }
 
-function renderTreeCards(start, end, finished) {
+function renderTreeCards() {
   const treesDiv = document.getElementById('trees-container');
   get('/api/public-trees', {'public': true}, function(treesArr) {
       for (let i = 0; i < treesArr.length; i++) {
           const currentTree = treesArr[i];
           treesDiv.appendChild(treeDOMObject(currentTree));
       };
-  });
-  return finished; //Boolean variable that dictates whether or not all of the posts have been loaded 
+      if (treesArr.length === 0) {
+        finished = true
+      }
+      else {
+        finished = false
+      }
+  }); //Boolean variable that dictates whether or not all of the posts have been loaded 
 };
+
