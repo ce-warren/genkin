@@ -171,10 +171,6 @@ function deletePerson(person) {
 
 }
 
-function createPersonDiv(person) {
-
-}
-
 function showButtons(id) {
     document.getElementById('name-label-'+id).style.display = 'none'
     document.getElementById('input-box-'+id).removeAttribute('style')
@@ -213,7 +209,7 @@ function renderForm() {
         const generation = document.createElement('div')
         generation.id = 'gen-' + ind
         generation.className = 'generation'
-        form.appendChild(generation)
+        form.prepend(generation)
 
         for (tree of treeList) {
             for (person of tree.names) {
@@ -633,7 +629,7 @@ function uploadTextFile() {
     }
 }
 
-function showText() {
+function showText(user) {
     currentTab = 'text'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'text-tab') {
