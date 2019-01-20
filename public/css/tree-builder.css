@@ -14,6 +14,7 @@
     border-radius: 10px;
     margin-top: .7rem;
     padding: 5px;
+    padding-bottom: 10px
 }
 
 .input {
@@ -25,6 +26,7 @@
 }
 
 h4 {
+    margin-top: 2%;
     margin-bottom: 2%;
     font-size: 20px;
     padding-left: 5px;
@@ -48,6 +50,7 @@ button {
     font-size: 12px;
     margin:5%;
     width: 40%;
+    padding: .2rem
 }
 
 button:hover {
@@ -75,5 +78,5 @@ input {
 
 #form {
     overflow: scroll;
-    height: 500px;
+    height: 700px;
 }
