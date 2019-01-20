@@ -127,3 +127,9 @@ textarea {
     overflow: scroll;
     height: 600px
 }
+
+.selected-media {
+    border: solid;
+    border-color: #212529;
+    border-width: 4px
+}

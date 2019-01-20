@@ -41,7 +41,7 @@ router.get('/person', function(req, res) {
 router.post('/person', connect.ensureLoggedIn(), function(req, res) {
   const newPerson = new Person({
     'name': req.body.name, //why is this not passed in?
-    'partner': '',
+    'partner': null,
     'subtree': [],
     'photos' : [],
     'videos' : [],
@@ -54,6 +54,28 @@ router.post('/person', connect.ensureLoggedIn(), function(req, res) {
   });
   res.send(newPerson);
 });
+
+router.post('/person-saver', connect.ensureLoggedIn(), function(req, res) {
+  const newPerson = new Person({
+    'name': req.body.name, //why is this not passed in?
+    'partner': req.body.partner,
+    'subtree': req.body.subtree,
+    'photos' : req.body.photos,
+    'videos' : req.body.videos,
+    'audios' : req.body.audios,
+    'texts': req.body.texts
+  });
+
+  newPerson.save(function(err,person) {
+    if (err) console.log(err);
+  });
+  res.send(newPerson);
+});
+
+router.delete('/person', connect.ensureLoggedIn(), function(req, res) {
+  Person.findOneAndDelete({_id: req.query._id}, function(err, person) {
+  });
+})
 
 // trees
 let initial = 0
@@ -93,6 +115,27 @@ router.post('/tree', connect.ensureLoggedIn(), function(req, res) {
     res.send(newTree);
   }
 );
+
+router.post('/tree-saver', connect.ensureLoggedIn(), function(req, res) {
+  const newTree = new Tree({
+    'creator_id': req.user._id,
+    'creator_name': req.user.name,
+    'contributor_names': [],
+    'names': req.body.names,
+    'public': req.body.public
+  });
+
+  newTree.save(function(err,tree) {
+    if (err) console.log(err);
+  });
+  res.send(newTree);
+}
+);
+
+router.delete('/tree', connect.ensureLoggedIn(), function(req, res) {
+  Tree.findOneAndDelete({_id: req.query._id}, function(err, tree) {
+  });
+})
 
 // images
 router.get('/images', function(req, res) {

@@ -21,7 +21,7 @@ class Person {
     constructor(_name, _id) {
         this.name = _name;
         this.id = _id
-        this.partner = '';
+        this.partner = null;
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
         this.videos = []
@@ -38,7 +38,10 @@ class Person {
     }
 
     addPhoto(photo) {
-        this.photos.push(photo)
+
+        if (!this.photos.includes(photo)) {
+            this.photos.push(photo)
+        }
     }
 
     removePhoto(photo) {
@@ -51,7 +54,9 @@ class Person {
     }
 
     addVideo(video) {
-        this.videos.push(video)
+        if (!this.videos.includes(video)) {
+            this.videos.push(video)
+        }
     }
 
     removeVideo(video) {
@@ -64,7 +69,9 @@ class Person {
     }
 
     addAudio(audio) {
-        this.audios.push(audio)
+        if (!this.audios.includes(audio)) {
+            this.audios.push(audio)
+        }
     }
 
     removeAudio(audio) {
@@ -77,7 +84,9 @@ class Person {
     }
 
     addText(text) {
-        this.texts.push(text)
+        if (!this.texts.includes(text)) {
+            this.texts.push(text)
+        }
     }
 
     removeText(text) {
@@ -121,7 +130,6 @@ function renderGraph(current_id, root) {
     return area; //the final complete list containing the family tree
 }
 
-
 function newGraph (graph) {
     const level = document.createElement('ul');
     for (i of graph.names) {
@@ -153,22 +161,82 @@ function checkForChildren(treeList) {
 function changeName(person) {
     person.name = document.getElementById('input-box-'+person.id).value
     document.getElementById('name-label-'+person.id).innerHTML = person.name
+    renderForm()
 }
 
 function addPartner(person) {
+    function associate(person1, person2) {
+        person2.partner = person1
+        person1.partner = person2
+        renderForm()
+    }
 
+    const menu = document.getElementById('dropdown-menu-'+person.id)
+    const subMenu = document.createElement('div')
+    subMenu.className = 'dropdown-content'
+    menu.appendChild(subMenu)
+    for (p in personDict) {
+        if (personDict[p].partner == null && p !== person.id) {
+            let listItem = document.createElement('p')
+            listItem.id = 'person-' + p
+            listItem.innerHTML = personDict[p].name
+            listItem.addEventListener('click', function() {associate(personDict[listItem.id.split('-').pop()], person)})
+            subMenu.appendChild(listItem)
+        }
+    }
+    let cancel = document.createElement('p')
+    cancel.innerHTML = 'Cancel'
+    cancel.addEventListener('click', function() {document.getElementById('dropdown-menu-'+person.id).innerHTML = ''})
+    subMenu.appendChild(cancel)
 }
 
 function addSibling(person) {
-
+    p = new Person('[Enter Name]', idCounter);
+    personDict[idCounter] = p;
+    idCounter ++;
+    for (tree of treeList) {
+        if (tree.names.includes(person)) {
+            tree.addName(p)
+            break
+        }
+    }
+    renderForm()
 }
 
 function addParent(person) {
-
+    p = new Person('[Enter Name]', idCounter);
+    personDict[idCounter] = p;
+    idCounter ++;
+    newTree = new Tree()
+    newTree.addName(p)
+    treeList.push(newTree)
+    person.addSubtree(newTree)
+    renderForm()
 }
 
 function deletePerson(person) {
-
+    // delete this person (remove from person list)
+    // resursively delete subtrees
+    // delete partner refs
+    // remove from tree 
+    function recurseDelete(person) {
+        for (tree_ind in treeList) {
+            if (treeList[tree_ind].names.includes(person)) {
+                treeList[tree_ind].removeName(person)
+            }
+        }
+        if (person.partner !== null && person.partner !== undefined) {
+            personDict[person.partner].partner = null
+        }
+        for (tree of person.subtree) {
+            for (person2 of tree.names) {
+                recurseDelete(person2)
+            }
+        }
+        delete personDict[person.id]
+    }
+    recurseDelete(person)
+    renderForm()
 }
 
 function showButtons(id) {
@@ -200,8 +268,20 @@ function hideButtons(id) {
 
 function renderForm() {
     const form = document.getElementById('form')
-    let treeList = [rootTree]
-    ind = 0
+    form.innerHTML = ''
+    let innerTreeList = [rootTree]
+    let ind = 0
+
+    let count = 0
+    for (item in personDict) {count ++}
+    if (count == 0) {
+        p = new Person('[Enter Name]', idCounter);
+        personDict[idCounter] = p;
+        idCounter ++;
+        newTree = new Tree();
+        newTree.addName(p)
+        treeList.push(newTree)
+    }
 
     do {
         let newTreeList = []
@@ -211,7 +291,7 @@ function renderForm() {
         generation.className = 'generation'
         form.prepend(generation)
 
-        for (tree of treeList) {
+        for (tree of innerTreeList) {
             for (person of tree.names) {
                 newTreeList = newTreeList.concat(person.subtree)
 
@@ -250,7 +330,7 @@ function renderForm() {
                 const nameButton = document.createElement('button')
                 nameButton.className = 'name-button'
                 nameButton.id = 'name-button-' + person.id
-                nameButton.innerHTML = 'Change Name'
+                nameButton.innerHTML = 'Save Name'
                 nameButton.style.display = 'none'
                 nameButton.addEventListener('click', function () {changeName(personDict[nameButton.id.split('-').pop()])})
                 personDiv.appendChild(nameButton)
@@ -260,7 +340,7 @@ function renderForm() {
                 mediaButton.className = 'media-button'
                 mediaButton.id = 'media-button-' + person.id
                 mediaButton.style.display = 'none'
-                mediaButton.addEventListener('click', function() {addMedia(personDict[nameButton.id.split('-').pop()])})
+                mediaButton.addEventListener('click', function() {addMedia(personDict[mediaButton.id.split('-').pop()])})
                 personDiv.appendChild(mediaButton)
 
                 const parentButton = document.createElement('button')
@@ -268,13 +348,17 @@ function renderForm() {
                 parentButton.className = 'parent-button'
                 parentButton.id = 'parent-button-' + person.id
                 parentButton.style.display = 'none'
-                parentButton.addEventListener('click', function() {addParent(person)})
+                parentButton.addEventListener('click', function() {addParent(personDict[parentButton.id.split('-').pop()])})
                 personDiv.appendChild(parentButton)
 
                 const partnerButton = document.createElement('button')
                 partnerButton.innerHTML = 'Add Partner'
                 partnerButton.id = 'partner-button-' + person.id
-                partnerButton.addEventListener('click', function() {addPartner(person)})
+                partnerButton.addEventListener('click', function() {
+                    if (partnerButton.className === 'partner-button') {
+                        addPartner(personDict[partnerButton.id.split('-').pop()])
+                    }
+                })
                 partnerButton.style.display = 'none'
                 personDiv.appendChild(partnerButton)
                 if (person.partner === '' || person.partner === null) {
@@ -284,12 +368,16 @@ function renderForm() {
                     partnerButton.className = 'partner-button-inactive'
                 }
 
+                const menu = document.createElement('div')
+                menu.id = 'dropdown-menu-' + person.id
+                personDiv.appendChild(menu)
+
                 const siblingButton = document.createElement('button')
                 siblingButton.innerHTML = 'Add Sibling'
                 siblingButton.className = 'sibling-button'
                 siblingButton.id = 'sibling-button-' + person.id
                 siblingButton.style.display = 'none'
-                siblingButton.addEventListener('click', function() {addSibling(person)})
+                siblingButton.addEventListener('click', function() {addSibling(personDict[siblingButton.id.split('-').pop()])})
                 personDiv.appendChild(siblingButton)
 
                 const deleteButton = document.createElement('button')
@@ -297,25 +385,29 @@ function renderForm() {
                 deleteButton.className = 'delete-button'
                 deleteButton.id = 'delete-button-' + person.id
                 deleteButton.style.display = 'none'
-                deleteButton.addEventListener('click', function() {deletePerson(person)})
+                deleteButton.addEventListener('click', function() {deletePerson(personDict[deleteButton.id.split('-').pop()])})
                 personDiv.appendChild(deleteButton)
             }
         }
-        treeList = newTreeList
+        innerTreeList = newTreeList
     }
-    while (checkForChildren(treeList));
+    while (checkForChildren(innerTreeList));
 
     //renderGraph()
 }
 
 let rootTree;
 let personDict = {}; // a list of ids mapped to person objects
+let treeList = []
+let databaseObjects = [];
+let idCounter = 0;
 
 function getTree(tree) {
     //transforms tree models into Tree objects
     let newTree = new Tree();
     for (i of tree.names) {
         get('/api/person', {'_id': i}, function(person) {
+            databaseObjects.push(person)
             let p = new Person(person.name, person._id)
             personDict[person._id] = p
             newTree.addName(p)
@@ -326,21 +418,43 @@ function getTree(tree) {
             p.texts = person.texts;
             for (j of person.subtree) {
                 get('/api/tree', {'_id':j}, function(tree2) {
-                    p.addSubtree(getTree(tree2));
+                    databaseObjects.push(tree)
+                    newTreeObject = getTree(tree2)
+                    p.addSubtree(newTreeObject);
+                    treeList.push(newTreeObject)
                 })
             }
         })
     }
+    treeList.push(newTree)
     return newTree;
 }
 
+function save() {
+    // writes current Tree object into tree model in database (erases other database objects)
+    // don't write empty subtrees
+
+    function deleteModels() {
+        // base it on the tree in the browser? reload page? save page? ????
+    }
+
+    let idMap = {};
+    function writeModels(tList) {
+        // nested recursion on tree then persons
+        // track mapping of old ID to new ID - after, add partners
+        
+    }
+    writeModels([rootTree])
+    deleteModels()
+    renderForm()
+}
 
 function renderStuff() {
     // this is a placeholder function - because of asynchronous stuff, if you call these render functions directly in the
     // main method, it runs before the data is loaded - unsure how to fix this, so for now, click "Add Generation"
     renderForm()
+    document.getElementById('add-nav-button').style.display = 'none'
 }
-
 
 function main() {
     const treeId = window.location.search.substring(1);
@@ -349,10 +463,10 @@ function main() {
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
         renderPage()
         rootTree = getTree(tree)
-        const but = document.getElementById("add-nav-button")
-        but.addEventListener('click', renderStuff)
+        document.getElementById('add-nav-button').addEventListener('click', renderStuff)
+        document.getElementById('save-nav-button').addEventListener('click', save)
     });
-} ;
+};
 
 main();
 
@@ -378,7 +492,7 @@ function uploadPhoto() {
     }
 }
 
-function showPhotos(user) {
+function showPhotos(user, person) {
     currentTab = 'photo'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'photos-tab') {
@@ -402,6 +516,23 @@ function showPhotos(user) {
                 const imageHolder = document.createElement('img')
                 imageHolder.src = 'data:image;base64,' + btoa(image.data)
                 imageHolder.setAttribute('class','photo-holder media-holder')
+                imageHolder.id = image._id
+                if (person.photos.includes(imageHolder.id)) {
+                    imageHolder.className = 'photo-holder media-holder selected-media'
+                }
+                else {
+                    imageHolder.className = 'photo-holder media-holder'
+                }
+                imageHolder.addEventListener('click', function() {
+                    if (person.photos.includes(imageHolder.id)) {
+                        person.removePhoto(imageHolder.id)
+                        imageHolder.className = 'photo-holder media-holder'
+                    }
+                    else {
+                        person.addPhoto(imageHolder.id);
+                        imageHolder.className = 'photo-holder media-holder selected-media'
+                    }
+                })
                 mediaContainer.appendChild(imageHolder)
             }
             loader.className = ''
@@ -445,14 +576,13 @@ function uploadVideo() {
         fileReader.onload = function() {
             const binData = fileReader.result
             post('/api/video', {content:binData, type:dataType}, function(video) {
-                console.log(video)
                 showVideos()
             });
         }  
     }
 }
 
-function showVideos(user) {
+function showVideos(user, person) {
     currentTab = 'video'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'videos-tab') {
@@ -479,6 +609,23 @@ function showVideos(user) {
                 videoSource.type = video.type
                 videoHolder.appendChild(videoSource)
                 videoHolder.setAttribute('class','video-holder media-holder')
+                videoHolder.id = video._id
+                if (person.videos.includes(videoHolder.id)) {
+                    videoHolder.className = 'video-holder media-holder selected-media'
+                }
+                else {
+                    videoHolder.className = 'video-holder media-holder'
+                }
+                videoHolder.addEventListener('click', function() {
+                    if (person.videos.includes(videoHolder.id)) {
+                        person.removeVideo(videoHolder.id)
+                        videoHolder.className = 'video-holder media-holder'
+                    }
+                    else {
+                        person.addVideo(videoHolder.id);
+                        videoHolder.className = 'video-holder media-holder selected-media'
+                    }
+                })
                 mediaContainer.appendChild(videoHolder)
             }
             loader.className = ''
@@ -541,7 +688,7 @@ function uploadMusic() {
     }
 }
 
-function showMusic(user) {
+function showMusic(user, person) {
     currentTab = 'music'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'music-tab') {
@@ -562,13 +709,30 @@ function showMusic(user) {
     get('/api/audios', {'creator_id': user._id}, function(audios) {
         if (currentTab === 'music') {
             for (audio of audios) {
+
                 const audioHolder = document.createElement('audio')
                 audioHolder.setAttribute('controls', '')
                 const audioSource = document.createElement('source')
                 audioSource.src = 'data:audio;base64,' + btoa(audio.data)
                 audioSource.type = audio.type
                 audioHolder.appendChild(audioSource)
-                audioHolder.setAttribute('class','audio-holder media-holder')
+                audioHolder.id = audio._id
+                if (person.audios.includes(audioHolder.id)) {
+                    audioHolder.className = 'audio-holder media-holder selected-media'
+                }
+                else {
+                    audioHolder.className = 'audio-holder media-holder'
+                }
+                audioHolder.addEventListener('mouseover', function() { // not sure why 'click' listener won't work
+                    if (person.audios.includes(audioHolder.id)) {
+                        person.removeAudio(audioHolder.id)
+                        audioHolder.className = 'audio-holder media-holder'
+                    }
+                    else {
+                        person.addAudio(audioHolder.id);
+                        audioHolder.className = 'audio-holder media-holder selected-media'
+                    }
+                })
                 mediaContainer.appendChild(audioHolder)
             }
             loader.className = ''
@@ -629,7 +793,7 @@ function uploadTextFile() {
     }
 }
 
-function showText(user) {
+function showText(user, person) {
     currentTab = 'text'
     for (i of document.getElementsByClassName('media-nav-item')) {
         if (i.id === 'text-tab') {
@@ -658,6 +822,23 @@ function showText(user) {
                     textHolder.appendChild(textP)
                 }
                 textHolder.setAttribute('class','text-holder media-holder')
+                textHolder.id = text._id
+                if (person.texts.includes(textHolder.id)) {
+                    textHolder.className = 'text-holder media-holder selected-media'
+                }
+                else {
+                    textHolder.className = 'text-holder media-holder'
+                }
+                textHolder.addEventListener('click', function() {
+                    if (person.texts.includes(textHolder.id)) {
+                        person.removeText(textHolder.id)
+                        textHolder.className = 'text-holder media-holder'
+                    }
+                    else {
+                        person.addText(textHolder.id);
+                        textHolder.className = 'text-holder media-holder selected-media'
+                    }
+                })
                 mediaContainer.appendChild(textHolder)
             }
             loader.className = ''
@@ -706,28 +887,30 @@ function showText(user) {
 
 function tabButtons(user) {
     const photosTab = document.getElementById('photos-tab')
-    photosTab.addEventListener('click', function() {showPhotos(user)})
+    photosTab.addEventListener('click', function() {showPhotos(user, person)})
 
     const videosTab = document.getElementById('videos-tab')
-    videosTab.addEventListener('click', function() {showVideos(user)})
+    videosTab.addEventListener('click', function() {showVideos(user, person)})
 
     const musicTab = document.getElementById('music-tab')
-    musicTab.addEventListener('click', function() {showMusic(user)})
+    musicTab.addEventListener('click', function() {showMusic(user, person)})
 
     const textTab = document.getElementById('text-tab')
-    textTab.addEventListener('click', function() {showText(user)})
+    textTab.addEventListener('click', function() {showText(user, person)})
+
+    const closeTab = document.getElementById('exit-tab')
+    closeTab.addEventListener('click', function() {
+        document.getElementById('graph').innerHTML='';
+        renderGraph;
+    })
 };
 
-function renderMediaGallery() {
+function addMedia(person) {
     const container = document.getElementById('graph')
     container.innerHTML = ''
-    container.innerHTML = '<div class="text-center"><h1>Media Gallery</h1><h6>Uploaded Media</h6></div><div class="row mt-4"><ul class="nav flex-column col-3" id="media-nav"><li class="nav-item media-nav-item" id="photos-tab">Photos</li><li class="nav-item media-nav-item" id="videos-tab">Videos</li><li class="nav-item media-nav-item" id="music-tab">Music / Audio</li><li class="nav-item media-nav-item" id="text-tab">Text</li></ul><div id="media-container" class="col-9"></div></div>'
+    container.innerHTML = '<div class="text-center"><h1>Media Gallery</h1><h6>Click to Select Media for ' + person.name + '</h6></div><div class="row mt-4"><ul class="nav flex-column col-3" id="media-nav"><li class="nav-item media-nav-item" id="photos-tab">Photos</li><li class="nav-item media-nav-item" id="videos-tab">Videos</li><li class="nav-item media-nav-item" id="music-tab">Music / Audio</li><li class="nav-item media-nav-item" id="text-tab">Text</li><li class="nav-item media-nav-item" id="exit-tab">Exit Gallery</li></ul><div id="media-container" class="col-9"></div></div>'
     get('/api/whoami', {}, function(user) {
-        tabButtons(user);
-        showPhotos(user)
+        tabButtons(user, person);
+        showPhotos(user, person)
     })   
-}
-
-function addMedia(person) {
-    renderMediaGallery()
 }
