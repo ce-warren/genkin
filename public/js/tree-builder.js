@@ -532,6 +532,19 @@ function save() {
     writeModels(createList())
 }
 
+function deleteTree() {
+    for (object in databaseObjects) {
+        if (databaseObjects[object] === 'person') {
+            post('/api/person-delete', {'_id': object}, function() {})
+        }
+        else {
+            post('/api/tree-delete', {'_id': object}, function(newTree) {
+                window.location.assign('u/user?'+newTree.creator_id)
+            })
+        }
+    }
+}
+
 function renderStuff() {
     // remove when you figure out how to render in proper order
     document.getElementById('start-nav-button').style.display = 'none'
@@ -548,6 +561,7 @@ function main() {
         rootTree = getTree(tree)
         document.getElementById('start-nav-button').addEventListener('click', renderStuff)
         document.getElementById('save-nav-button').addEventListener('click', save)
+        document.getElementById('delete-nav-button').addEventListener('click', deleteTree)
         document.getElementById('ar-nav-button').addEventListener('click', function() {
             window.location.assign('/tree-ar?' + window.location.search.substring(1))
         })

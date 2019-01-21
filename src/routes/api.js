@@ -74,6 +74,7 @@ router.post('/person-saver', connect.ensureLoggedIn(), function(req, res) {
 
 router.post('/person-delete', connect.ensureLoggedIn(), function(req, res) {
   Person.findOneAndDelete({_id: req.body._id}, function(err, person) {
+    res.send(person)
   });
 })
 
@@ -140,6 +141,7 @@ router.post('/tree-saver', connect.ensureLoggedIn(), function(req, res) {
 
 router.post('/tree-delete', connect.ensureLoggedIn(), function(req, res) {
   Tree.findOneAndDelete({_id: req.body._id}, function(err, tree) {
+    res.send(tree)
   });
 })
 
