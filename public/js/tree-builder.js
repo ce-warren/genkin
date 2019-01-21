@@ -265,8 +265,6 @@ function hideButtons(id) {
 }
 
 function renderForm() {
-    console.log('rendering')
-    console.log(rootTree)
     if (rootTree.names.length === 0) {
         p = new Person('[Enter Name]', idCounter);
         personDict[idCounter] = p;
@@ -357,7 +355,7 @@ function renderForm() {
                 })
                 partnerButton.style.display = 'none'
                 personDiv.appendChild(partnerButton)
-                if (person.partner === '' || person.partner === null) {
+                if (person.partner === '' || person.partner === null || person.partner === undefined) {
                     partnerButton.className = 'partner-button'
                 }
                 else {
@@ -401,15 +399,9 @@ let treeIDCounter = 0;
 
 function getTree(tree) {
     //transforms tree models into Tree objects
-    console.log('outer tree')
-    console.log(tree)
     let newTree = new Tree();
     for (i of tree.names) {
-        console.log('names')
-        console.log(i)
         get('/api/person', {'_id': i}, function(person) {
-            console.log('person')
-            console.log(person)
             databaseObjects[person._id] = 'person'
             let p = new Person(person.name, person._id)
             personDict[person._id] = p
@@ -421,8 +413,6 @@ function getTree(tree) {
             p.texts = person.texts;
             for (j of person.subtree) {
                 get('/api/tree', {'_id':j}, function(tree2) {
-                    console.log('tree2')
-                    console.log(tree2)
                     databaseObjects[tree2._id] = 'tree'
                     newTreeObject = getTree(tree2)
                     p.addSubtree(newTreeObject);
@@ -505,8 +495,9 @@ function save() {
                 else {
                     addPartners()
                     deleteModels()
-                    console.log('saving')
-                    window.location.assign('/')
+                    window.location.assign('/tree-builder?'+newTree._id)
+                    window.location.reload(true)
+
 
                     // window.history.replaceState('', '', '?'+newTree._id);
                     // window.location.reload(true)
@@ -550,7 +541,6 @@ function renderStuff() {
 
 function main() {
     const treeId = window.location.search.substring(1);
-    console.log(treeId)
     get('/api/tree', {'_id': treeId}, function(tree) {
         databaseObjects[tree._id] = 'tree'
         const title = document.getElementById('title-place')
