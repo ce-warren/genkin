@@ -496,8 +496,7 @@ function save() {
                     addPartners()
                     deleteModels()
                     window.location.assign('/tree-builder?'+newTree._id)
-                    window.location.reload(true)
-
+                    // window.location.reload(true)
 
                     // window.history.replaceState('', '', '?'+newTree._id);
                     // window.location.reload(true)
