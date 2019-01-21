@@ -103,6 +103,10 @@ class Person {
     hasParent() {
         return this.subtree.length > 0; //if the Person has parents to be represented in the subtree
     }
+
+    hasPartner() {
+        return !this.partner;
+    }
 }
 
 function renderPage() {
@@ -115,7 +119,7 @@ function renderPage() {
     form.className = 'col-4'
     lowerDiv.appendChild(form)
     const graph = document.createElement('div')
-    graph.id = 'graph'
+    graph.id = 'tree'
     graph.className = 'col-8'
     lowerDiv.appendChild(graph)
 
@@ -133,10 +137,16 @@ function renderGraph(current_id, root) {
 }
 
 function newGraph (graph) {
+    //to create an entire graph from scratch 
     const level = document.createElement('ul');
     for (i of graph.names) {
         const newLevel = document.createElement('li');
-        newLevel.innerText = i.name;
+        if (!this.hasParent()) {
+            newLevel.innerHTML = <a href="#">i.name</a>
+        }
+        else {
+            newLevel.innerHTML = <a href="#">i.name</a><br><a href="#">i.partner.name</a></br>
+        } 
         if (i.hasParent()) {
             //recursively creates a new list
             for (j of graph.subtree) {
