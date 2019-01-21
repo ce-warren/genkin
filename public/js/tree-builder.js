@@ -1,6 +1,8 @@
 class Tree {
     constructor() {
         this.names = [] // array of Person objects
+        this.id = treeIDCounter;
+        treeIDCounter ++;
     }
 
     addName(name) {
@@ -215,10 +217,6 @@ function addParent(person) {
 }
 
 function deletePerson(person) {
-    // delete this person (remove from person list)
-    // resursively delete subtrees
-    // delete partner refs
-    // remove from tree 
     function recurseDelete(person) {
         for (tree_ind in treeList) {
             if (treeList[tree_ind].names.includes(person)) {
@@ -267,21 +265,19 @@ function hideButtons(id) {
 }
 
 function renderForm() {
-    const form = document.getElementById('form')
-    form.innerHTML = ''
-    let innerTreeList = [rootTree]
-    let ind = 0
-
-    let count = 0
-    for (item in personDict) {count ++}
-    if (count == 0) {
+    console.log('rendering')
+    console.log(rootTree)
+    if (rootTree.names.length === 0) {
         p = new Person('[Enter Name]', idCounter);
         personDict[idCounter] = p;
         idCounter ++;
-        newTree = new Tree();
-        newTree.addName(p)
-        treeList.push(newTree)
+        rootTree.addName(p)
     }
+
+    const form = document.getElementById('form')
+    form.innerHTML = ''
+    let ind = 0
+    let innerTreeList = [rootTree]
 
     do {
         let newTreeList = []
@@ -398,16 +394,23 @@ function renderForm() {
 
 let rootTree;
 let personDict = {}; // a list of ids mapped to person objects
-let treeList = []
-let databaseObjects = [];
+let treeList = [] // a list of all trees
+let databaseObjects = {}; // a list created of all models during getTree (so you know what to delete)
 let idCounter = 0;
+let treeIDCounter = 0;
 
 function getTree(tree) {
     //transforms tree models into Tree objects
+    console.log('outer tree')
+    console.log(tree)
     let newTree = new Tree();
     for (i of tree.names) {
+        console.log('names')
+        console.log(i)
         get('/api/person', {'_id': i}, function(person) {
-            databaseObjects.push(person)
+            console.log('person')
+            console.log(person)
+            databaseObjects[person._id] = 'person'
             let p = new Person(person.name, person._id)
             personDict[person._id] = p
             newTree.addName(p)
@@ -418,7 +421,9 @@ function getTree(tree) {
             p.texts = person.texts;
             for (j of person.subtree) {
                 get('/api/tree', {'_id':j}, function(tree2) {
-                    databaseObjects.push(tree)
+                    console.log('tree2')
+                    console.log(tree2)
+                    databaseObjects[tree2._id] = 'tree'
                     newTreeObject = getTree(tree2)
                     p.addSubtree(newTreeObject);
                     treeList.push(newTreeObject)
@@ -432,47 +437,140 @@ function getTree(tree) {
 
 function save() {
     // writes current Tree object into tree model in database (erases other database objects)
-    // don't write empty subtrees
 
     function deleteModels() {
-        // base it on the tree in the browser? reload page? save page? ????
+        for (object in databaseObjects) {
+            if (databaseObjects[object] === 'person') {
+                post('/api/person-delete', {'_id': object}, function() {})
+            }
+            else {
+                post('/api/tree-delete', {'_id': object}, function() {})
+            }
+        }
     }
 
-    let idMap = {};
-    function writeModels(tList) {
-        // nested recursion on tree then persons
-        // track mapping of old ID to new ID - after, add partners
-        
+    function addPartners() {
+        for (person in personDict) {
+            if (personDict[person].partner !== null && personDict[person].partner !== undefined) {
+                post('/api/person-update', {'_id':personIDMap[person], 'partner': personIDMap[personDict[person].partner.id]}, function() {})
+            }
+        }
     }
-    writeModels([rootTree])
-    deleteModels()
-    renderForm()
+
+    function createList() {
+        // return a list of trees and persons in sorted order so all children come before parents
+        list = [];
+        let treeL = [rootTree];
+        let personL = [];
+        do {
+            for (j in treeL) {
+                for (i in treeL[j].names) {
+                    personL.push(treeL[j].names[i])
+                }
+                list.push(treeL[j])
+            }
+            treeL = [];
+            for (j in personL) {
+                for (i in personL[j].subtree) {
+                    if (personL[j].subtree[i].names !== []) {
+                        treeL.push(personL[j].subtree[i])
+                    }
+                }
+                list.push(personL[j])
+            }
+            personL = [];
+        }
+        while (treeL.length !== 0 || personL.length !== 0)
+        list.reverse()
+        return list
+    }
+
+    let personIDMap = {};
+    let treeIDMap = {};
+    function writeModels(list) {
+        function writeTree(tree) {
+            let public = false
+            if (tree === rootTree) {public = true}
+            let newNames = [];
+            for (i in tree.names) {
+                newNames.push(personIDMap[tree.names[i].id])
+            }
+            post('/api/tree-saver', {'public': public, 'names': newNames}, function(newTree) {
+                list.splice(0,1)
+                treeIDMap[tree.id] = newTree._id
+                if (list.length !== 0) {
+                    if (list[0] instanceof Tree) {writeTree(list[0])}
+                    else {writePerson(list[0])}
+                }
+                else {
+                    addPartners()
+                    deleteModels()
+                    console.log('saving')
+                    window.location.assign('/')
+
+                    // window.history.replaceState('', '', '?'+newTree._id);
+                    // window.location.reload(true)
+
+                    //window.location.assign('/tree-builder?'+newTree._id)
+
+                    // window.history.replaceState('', '', '?'+newTree._id);
+                    // personDict = {}
+                    // databaseObjects = []
+                    // treeList = []
+                    // rootTree = getTree(newTree)
+                    // document.getElementById('start-nav-button').style = ''
+                    // document.getElementById('form').innerHTML = ''
+                }
+            })
+        }
+        function writePerson(person) {
+            let newSubtree = []
+            for (i in person.subtree) {
+                newSubtree.push(treeIDMap[person.subtree[i].id])
+            }  
+            post('/api/person-saver', {'name': person.name,'subtree': newSubtree, 'photos': person.photos, 'videos': person.photos, 'audios': person.audios, 'texts':person.texts}, function(newPerson) {
+                list.splice(0,1)
+                personIDMap[person.id] = newPerson._id
+                if (list[0] instanceof Tree) {writeTree(list[0])}
+                else {writePerson(list[0])}
+            })
+        }
+        if (list[0] instanceof Tree) {writeTree(list[0])}
+        else {writePerson(list[0])}
+    }
+
+    writeModels(createList())
 }
 
 function renderStuff() {
-    // this is a placeholder function - because of asynchronous stuff, if you call these render functions directly in the
-    // main method, it runs before the data is loaded - unsure how to fix this, so for now, click "Add Generation"
+    // remove when you figure out how to render in proper order
+    document.getElementById('start-nav-button').style.display = 'none'
     renderForm()
-    document.getElementById('add-nav-button').style.display = 'none'
 }
 
 function main() {
     const treeId = window.location.search.substring(1);
+    console.log(treeId)
     get('/api/tree', {'_id': treeId}, function(tree) {
+        databaseObjects[tree._id] = 'tree'
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
         renderPage()
         rootTree = getTree(tree)
-        document.getElementById('add-nav-button').addEventListener('click', renderStuff)
+        document.getElementById('start-nav-button').addEventListener('click', renderStuff)
         document.getElementById('save-nav-button').addEventListener('click', save)
+        document.getElementById('ar-nav-button').addEventListener('click', function() {
+            window.location.assign('/tree-ar?' + window.location.search.substring(1))
+        })
+        document.getElementById('vr-nav-button').addEventListener('click', function() {
+            window.location.assign('/tree-vr?' + window.location.search.substring(1))
+        })
     });
 };
 
 main();
 
-
 //////////////// MEDIA GALLERY STUFF ////////////////
-
 
 let currentTab;
 
@@ -901,7 +999,7 @@ function tabButtons(user) {
     const closeTab = document.getElementById('exit-tab')
     closeTab.addEventListener('click', function() {
         document.getElementById('graph').innerHTML='';
-        renderGraph;
+        renderGraph();
     })
 };
 

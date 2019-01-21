@@ -58,7 +58,7 @@ router.post('/person', connect.ensureLoggedIn(), function(req, res) {
 router.post('/person-saver', connect.ensureLoggedIn(), function(req, res) {
   const newPerson = new Person({
     'name': req.body.name, //why is this not passed in?
-    'partner': req.body.partner,
+    'partner': null,
     'subtree': req.body.subtree,
     'photos' : req.body.photos,
     'videos' : req.body.videos,
@@ -72,8 +72,15 @@ router.post('/person-saver', connect.ensureLoggedIn(), function(req, res) {
   res.send(newPerson);
 });
 
-router.delete('/person', connect.ensureLoggedIn(), function(req, res) {
-  Person.findOneAndDelete({_id: req.query._id}, function(err, person) {
+router.post('/person-delete', connect.ensureLoggedIn(), function(req, res) {
+  Person.findOneAndDelete({_id: req.body._id}, function(err, person) {
+  });
+})
+
+router.post('/person-update', connect.ensureLoggedIn(), function(req, res) {
+  Person.findOne({_id: req.body._id}, function(err, person) {
+    person.partner = req.body.partner
+    person.save()
   });
 })
 
@@ -89,7 +96,7 @@ router.get('/public-trees', function(req, res) {
 });
 
 router.get('/user-trees', function(req, res) {
-  Tree.find({creator_id: req.query.creator_id}, function(err, trees) {
+  Tree.find({creator_id: req.query.creator_id, public: true}, function(err, trees) {
     res.send(trees);
   });
 });
@@ -129,11 +136,10 @@ router.post('/tree-saver', connect.ensureLoggedIn(), function(req, res) {
     if (err) console.log(err);
   });
   res.send(newTree);
-}
-);
+});
 
-router.delete('/tree', connect.ensureLoggedIn(), function(req, res) {
-  Tree.findOneAndDelete({_id: req.query._id}, function(err, tree) {
+router.post('/tree-delete', connect.ensureLoggedIn(), function(req, res) {
+  Tree.findOneAndDelete({_id: req.body._id}, function(err, tree) {
   });
 })
 
