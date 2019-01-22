@@ -14,11 +14,8 @@ function headingEventListener() {
 function renderNavbar(user) {
   const navbarDiv = document.getElementById('nav-item-container');
 
-  const navBrands = document.getElementsByClassName('navbar-brand')
-  for (let brand of navBrands) {
-    brand.addEventListener('click', headingEventListener)
-  }
-
+  document.getElementById('nav-head').addEventListener('click', headingEventListener)
+ 
   navbarDiv.appendChild(newNavbarItem('Home', '/'));
   navbarDiv.appendChild(newNavbarItem('About', '/about'));
   navbarDiv.appendChild(newNavbarItem('Gallery', '/gallery'));
