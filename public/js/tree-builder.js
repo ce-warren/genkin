@@ -147,7 +147,7 @@ function newGraph (graph) {
             partnership.innerHTML = '<a href="#">' + i.name + '</a>'
         }
         else {
-            partnership.innerHTML = '<a href="#">' + i.name + '</a><a href="#">' + personDict[i.partner].name + '</a>'
+            // partnership.innerHTML = '<a href="#">' + i.name + '</a><a href="#">' + personDict[i.partner].name + '</a>'
         } 
         console.log(i)
         if (i.subtree.length > 0) {
@@ -155,20 +155,7 @@ function newGraph (graph) {
             let newTree = new Tree();
             for (j of i.subtree) {
                 for (k of j.names) {
-                    console.log(k)
-                    if (k.partner !== null && k.partner !== undefined) {
-                        console.log('calling')
-                        console.log(k.partner)
-                        console.log(k.id)
-                        if (k.partner > k.id) {
-                            console.log('cale')
-                            newTree.addName(k)
-                        }
-                    }
-                    else {
-                        console.log('here')
-                        newTree.addName(k)
-                    }
+                    newTree.addName(k)
                 }
             } 
             partnership.appendChild(newGraph(newTree))  
