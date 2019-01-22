@@ -144,10 +144,10 @@ function newGraph (graph) {
         const partnership = document.createElement('div');
         container.className = 'partners';
         if (!this.hasPartner()) {
-            partnership.innerHTML = <a href="#">i.name</a>
+            partnership.innerHTML = '<a href="#">i.name</a>'
         }
         else {
-            partnership.innerHTML = <a href="#">i.name</a><a href="#">i.partner.name</a>
+            partnership.innerHTML = '<a href="#">i.name</a><a href="#">i.partner.name</a>'
         } 
         if (i.hasParent()) {
             //recursively creates a new list
@@ -510,12 +510,6 @@ function save() {
                     addPartners()
                     deleteModels()
                     window.location.assign('/tree-builder?'+newTree._id)
-                    // window.location.reload(true)
-
-                    // window.history.replaceState('', '', '?'+newTree._id);
-                    // window.location.reload(true)
-
-                    //window.location.assign('/tree-builder?'+newTree._id)
 
                     // window.history.replaceState('', '', '?'+newTree._id);
                     // personDict = {}
@@ -1015,13 +1009,16 @@ function tabButtons(user) {
 
     const closeTab = document.getElementById('exit-tab')
     closeTab.addEventListener('click', function() {
-        document.getElementById('graph').innerHTML='';
+        const container = document.getElementById('tree-gallery')
+        container.id = 'tree'
+        container.innerHTML = ''
         renderGraph();
     })
 };
 
 function addMedia(person) {
-    const container = document.getElementById('graph')
+    const container = document.getElementById('tree')
+    container.id = 'tree-gallery'
     container.innerHTML = ''
     container.innerHTML = '<div class="text-center"><h1>Media Gallery</h1><h6>Click to Select Media for ' + person.name + '</h6></div><div class="row mt-4"><ul class="nav flex-column col-3" id="media-nav"><li class="nav-item media-nav-item" id="photos-tab">Photos</li><li class="nav-item media-nav-item" id="videos-tab">Videos</li><li class="nav-item media-nav-item" id="music-tab">Music / Audio</li><li class="nav-item media-nav-item" id="text-tab">Text</li><li class="nav-item media-nav-item" id="exit-tab">Exit Gallery</li></ul><div id="media-container" class="col-9"></div></div>'
     get('/api/whoami', {}, function(user) {
