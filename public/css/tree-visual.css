@@ -4,6 +4,8 @@ body {
 }
 
 #tree {
+  margin-bottom: 100%;
+  overflow: scroll;
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
   -webkit-transform-origin: 50%;
