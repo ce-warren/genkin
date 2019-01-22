@@ -137,19 +137,18 @@ function renderGraph(root) {
 function newGraph (graph) {
     //to create an entire graph from scratch 
     const level = document.createElement('ul');
-    console.log('call')
-    console.log(graph)
     for (i of graph.names) {
         const newLevel = document.createElement('li');
         const partnership = document.createElement('div');
         partnership.className = 'partners';
-        if (i.partner === null || i.partner === undefined) {
+        partnership.innerHTML = '<a href="#">' + i.name + '</a>'
+        // might need below code, depending on how partner graphing is implemented
+        /* if (i.partner === null || i.partner === undefined) {
             partnership.innerHTML = '<a href="#">' + i.name + '</a>'
         }
         else {
-            // partnership.innerHTML = '<a href="#">' + i.name + '</a><a href="#">' + personDict[i.partner].name + '</a>'
-        } 
-        console.log(i)
+            partnership.innerHTML = '<a href="#">' + i.name + '</a><a href="#">' + personDict[i.partner].name + '</a>'
+        }*/
         if (i.subtree.length > 0) {
             //recursively creates a new list
             let newTree = new Tree();
@@ -280,6 +279,7 @@ function hideButtons(id) {
     document.getElementById('delete-button-'+id).style.display = 'none'
     document.getElementById('show-button-'+id).removeAttribute('style')
     document.getElementById('hide-button-'+id).style.display = 'none'
+    document.getElementById('dropdown-menu-'+id).innerHTML = ''
     
 }
 
@@ -330,6 +330,7 @@ function renderForm() {
                 const nameLabel = document.createElement('h4')
                 nameLabel.innerHTML = person.name
                 nameLabel.id = 'name-label-' + person.id
+                nameLabel.addEventListener('click', function() {showButtons(nameLabel.id.split('-').pop())})
                 personDiv.appendChild(nameLabel)
 
                 const inputBox = document.createElement('input')
@@ -365,21 +366,24 @@ function renderForm() {
                 personDiv.appendChild(parentButton)
 
                 const partnerButton = document.createElement('button')
-                partnerButton.innerHTML = 'Add Partner'
+                partnerButton.className = 'partner-button'
                 partnerButton.id = 'partner-button-' + person.id
-                partnerButton.addEventListener('click', function() {
-                    if (partnerButton.className === 'partner-button') {
-                        addPartner(personDict[partnerButton.id.split('-').pop()])
-                    }
-                })
-                partnerButton.style.display = 'none'
-                personDiv.appendChild(partnerButton)
                 if (person.partner === '' || person.partner === null || person.partner === undefined) {
-                    partnerButton.className = 'partner-button'
+                    partnerButton.innerHTML = 'Add Partner'
+                    partnerButton.addEventListener('click', function() {
+                        addPartner(personDict[partnerButton.id.split('-').pop()])
+                    })
                 }
                 else {
-                    partnerButton.className = 'partner-button-inactive'
+                    partnerButton.innerHTML = 'Remove Partner'
+                    partnerButton.addEventListener('click', function() {
+                        personDict[personDict[partnerButton.id.split('-').pop()].partner].partner = null
+                        personDict[partnerButton.id.split('-').pop()].partner = null
+                        renderForm()
+                    })
                 }
+                partnerButton.style.display = 'none'
+                personDiv.appendChild(partnerButton)
 
                 const menu = document.createElement('div')
                 menu.id = 'dropdown-menu-' + person.id
@@ -461,7 +465,7 @@ function save() {
     function addPartners() {
         for (person in personDict) {
             if (personDict[person].partner !== null && personDict[person].partner !== undefined) {
-                post('/api/person-update', {'_id':personIDMap[person], 'partner': personIDMap[personDict[person].personDic[partner].id]}, function() {})
+                post('/api/person-update', {'_id':personIDMap[person], 'partner': personIDMap[personDict[person].partner]}, function() {})
             }
         }
     }
