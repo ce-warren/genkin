@@ -142,10 +142,10 @@ function newGraph (graph) {
     for (i of graph.names) {
         const newLevel = document.createElement('li');
         if (!this.hasParent()) {
-            newLevel.innerHTML = <a href="#">i.name</a>
+            newLevel.innerHTML = '<a href="#">i.name</a>'
         }
         else {
-            newLevel.innerHTML = <a href="#">i.name</a><br><a href="#">i.partner.name</a></br>
+            newLevel.innerHTML = '<a href="#">i.name</a><br><a href="#">i.partner.name</a></br>'
         } 
         if (i.hasParent()) {
             //recursively creates a new list
