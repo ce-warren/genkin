@@ -23,7 +23,7 @@ class Person {
     constructor(_name, _id) {
         this.name = _name;
         this.id = _id
-        this.partner = null;
+        this.partner = null; // an ID of the person object
         this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
         this.photos = []
         this.videos = []
@@ -130,30 +130,48 @@ function renderGraph(root) {
     //the initial current_id is graph
     //the global variable is rootTree
     //currently, the tree is being rebuilt with each submission
-
-    const area = document.getElementById(current_id); //the parent graph
-    area.appendChild(newGraph(root));
-    return area; //the final complete list containing the family tree
+    document.getElementById('tree').innerHTML = ''
+    document.getElementById('tree').appendChild(newGraph(root));
 }
 
 function newGraph (graph) {
     //to create an entire graph from scratch 
     const level = document.createElement('ul');
+    console.log('call')
+    console.log(graph)
     for (i of graph.names) {
         const newLevel = document.createElement('li');
         const partnership = document.createElement('div');
-        container.className = 'partners';
-        if (!this.hasPartner()) {
-            partnership.innerHTML = '<a href="#">i.name</a>'
+        partnership.className = 'partners';
+        if (i.partner === null || i.partner === undefined) {
+            partnership.innerHTML = '<a href="#">' + i.name + '</a>'
         }
         else {
-            partnership.innerHTML = '<a href="#">i.name</a><a href="#">i.partner.name</a>'
+            partnership.innerHTML = '<a href="#">' + i.name + '</a><a href="#">' + personDict[i.partner].name + '</a>'
         } 
-        if (i.hasParent()) {
+        console.log(i)
+        if (i.subtree.length > 0) {
             //recursively creates a new list
-            for (j of graph.subtree) {
-                newLevel.appendChild(newGraph(j));
-            }   
+            let newTree = new Tree();
+            for (j of i.subtree) {
+                for (k of j.names) {
+                    console.log(k)
+                    if (k.partner !== null && k.partner !== undefined) {
+                        console.log('calling')
+                        console.log(k.partner)
+                        console.log(k.id)
+                        if (k.partner > k.id) {
+                            console.log('cale')
+                            newTree.addName(k)
+                        }
+                    }
+                    else {
+                        console.log('here')
+                        newTree.addName(k)
+                    }
+                }
+            } 
+            partnership.appendChild(newGraph(newTree))  
         }
         newLevel.appendChild(partnership);
         level.appendChild(newLevel);
@@ -181,8 +199,8 @@ function changeName(person) {
 
 function addPartner(person) {
     function associate(person1, person2) {
-        person2.partner = person1
-        person1.partner = person2
+        person2.partner = person1.id
+        person1.partner = person2.id
         renderForm()
     }
 
@@ -401,7 +419,7 @@ function renderForm() {
     }
     while (checkForChildren(innerTreeList));
 
-    //renderGraph()
+    renderGraph(rootTree);
 }
 
 let rootTree;
@@ -456,7 +474,7 @@ function save() {
     function addPartners() {
         for (person in personDict) {
             if (personDict[person].partner !== null && personDict[person].partner !== undefined) {
-                post('/api/person-update', {'_id':personIDMap[person], 'partner': personIDMap[personDict[person].partner.id]}, function() {})
+                post('/api/person-update', {'_id':personIDMap[person], 'partner': personIDMap[personDict[person].personDic[partner].id]}, function() {})
             }
         }
     }
@@ -1012,7 +1030,7 @@ function tabButtons(user) {
         const container = document.getElementById('tree-gallery')
         container.id = 'tree'
         container.innerHTML = ''
-        renderGraph();
+        renderGraph(rootTree);
     })
 };
 
