@@ -126,7 +126,7 @@ function renderPage() {
     container.appendChild(lowerDiv)
 }
 
-function renderGraph(current_id, root) {
+function renderGraph(root) {
     //the initial current_id is graph
     //the global variable is rootTree
     //currently, the tree is being rebuilt with each submission
@@ -141,11 +141,13 @@ function newGraph (graph) {
     const level = document.createElement('ul');
     for (i of graph.names) {
         const newLevel = document.createElement('li');
-        if (!this.hasParent()) {
-            newLevel.innerHTML = <a href="#">i.name</a>
+        const partnership = document.createElement('div');
+        container.className = 'partners';
+        if (!this.hasPartner()) {
+            partnership.innerHTML = <a href="#">i.name</a>
         }
         else {
-            newLevel.innerHTML = <a href="#">i.name</a><br><a href="#">i.partner.name</a></br>
+            partnership.innerHTML = <a href="#">i.name</a><a href="#">i.partner.name</a>
         } 
         if (i.hasParent()) {
             //recursively creates a new list
@@ -153,7 +155,8 @@ function newGraph (graph) {
                 newLevel.appendChild(newGraph(j));
             }   
         }
-        level.appendChild(newLevel)
+        newLevel.appendChild(partnership);
+        level.appendChild(newLevel);
     }
     return level;
 }
@@ -212,6 +215,7 @@ function addSibling(person) {
             break
         }
     }
+    sibling = 
     renderForm()
 }
 
