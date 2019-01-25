@@ -146,6 +146,7 @@ function newGraph (graph) {
     //so add the parents first
     //keep in mind that the siblings will then have to be joined and go up to the same parents - center line through going up
     //make sure sibling nodes are not revisited and that they don't have separate spawns
+    //single arrays may be empty
     const level = document.createElement('ul');
     for (i of graph.names) {
         const newLevel = document.createElement('li');
