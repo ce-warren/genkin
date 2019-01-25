@@ -149,7 +149,6 @@ function newGraph (graph) {
         else {
             // partnership.innerHTML = '<a href="#">' + i.name + '</a><a href="#">' + personDict[i.partner].name + '</a>'
         } 
-        console.log(i)
         if (i.subtree.length > 0) {
             //recursively creates a new list
             let newTree = new Tree();
