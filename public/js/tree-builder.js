@@ -139,9 +139,10 @@ function newGraph (graph) {
     const level = document.createElement('ul');
     for (i of graph.names) {
         const newLevel = document.createElement('li');
-        const partnership = document.createElement('div');
-        partnership.className = 'partners';
-        partnership.innerHTML = '<a href="#">' + i.name + '</a>'
+        const link = document.createElement('a');
+        link.innerText = i.name;
+        link.href = "#";
+        newLevel.appendChild(link);
         // might need below code, depending on how partner graphing is implemented
         /* if (i.partner === null || i.partner === undefined) {
             partnership.innerHTML = '<a href="#">' + i.name + '</a>'
@@ -157,10 +158,11 @@ function newGraph (graph) {
                     newTree.addName(k)
                 }
             } 
-            partnership.appendChild(newGraph(newTree))  
+            newLevel.appendChild(newGraph(newTree))  
         }
-        newLevel.appendChild(partnership);
         level.appendChild(newLevel);
+
+     
     }
     return level;
 }
@@ -237,7 +239,7 @@ function addParent(person) {
 function deletePerson(person) {
     function recurseDelete(person) {
         for (tree_ind in treeList) {
-            if (treeList[tree_ind].names.includes(person)) {
+            if (treeList[tree_ind].names.includes(person)) { 
                 treeList[tree_ind].removeName(person)
             }
         }
