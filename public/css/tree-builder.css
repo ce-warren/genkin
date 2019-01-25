@@ -57,14 +57,6 @@ button:hover {
     cursor: pointer;
 }
 
-.partner-button-inactive {
-    background-image: linear-gradient(#ccc, #aaa)
-}
-
-.partner-button-inactive:hover {
-    cursor: not-allowed
-}
-
 input {
     margin-bottom: 2%;
     border:solid;
@@ -89,5 +81,9 @@ p {
 }
 
 p:hover {
+    cursor: pointer;
+}
+
+h4:hover {
     cursor: pointer;
 }
