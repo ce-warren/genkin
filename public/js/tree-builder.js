@@ -141,6 +141,11 @@ function renderGraph(root) {
 
 function newGraph (graph) {
     //to create an entire graph from scratch 
+    //check for lower level parents first
+    //check for their siblings and place those li into its own class - siblings are in a 2D array
+    //so add the parents first
+    //keep in mind that the siblings will then have to be joined and go up to the same parents - center line through going up
+    //make sure sibling nodes are not revisited and that they don't have separate spawns
     const level = document.createElement('ul');
     for (i of graph.names) {
         const newLevel = document.createElement('li');
