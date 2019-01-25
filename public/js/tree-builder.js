@@ -533,7 +533,19 @@ function save() {
         function writeTree(tree) {
             let public = false
             contributor = []
-            if (tree === rootTree) {public = true; contributor = siblingList}
+            if (tree === rootTree) {
+                public = true;
+                for (list1 of siblingList) {
+                    if (list1.length === 0) {}
+                    else {
+                        arr = []
+                        for (i of list1) {
+                            arr.push(personIDMap[i])
+                        }
+                        contributor.push(arr)
+                    }
+                }
+            }
             let newNames = [];
             for (i in tree.names) {
                 newNames.push(personIDMap[tree.names[i].id])
