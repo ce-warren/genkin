@@ -1,7 +1,7 @@
 class Tree {
     constructor() {
         this.names = [] // array of Person objects
-        this.id = treeIDCounter;
+        this.id = treeIDCounter.toString();
         treeIDCounter ++;
     }
 
@@ -223,9 +223,9 @@ function addPartner(person) {
 }
 
 function addSibling(person) {
-    p = new Person('[Enter Name]', idCounter);
-    personDict[idCounter] = p;
-    databaseObjects[idCounter] = 'person'
+    p = new Person('[Enter Name]', idCounter.toString());
+    personDict[idCounter.toString()] = p;
+    databaseObjects[idCounter.toString()] = 'person'
     idCounter ++;
     for (tree of treeList) {
         if (tree.names.includes(person)) {
@@ -233,14 +233,23 @@ function addSibling(person) {
             break
         }
     }
-    sibling = 
+    let added = false
+    for (arr of siblingList) {
+        if (arr.includes(person.id)) {
+            arr.push(p.id)
+            added = true
+        }
+    }
+    if (!added) {
+        siblingList.push([p.id, person.id])
+    }
     renderForm()
 }
 
 function addParent(person) {
     p = new Person('[Enter Name]', idCounter);
-    personDict[idCounter] = p;
-    databaseObjects[idCounter] = 'person'
+    personDict[idCounter.toString()] = p;
+    databaseObjects[idCounter.toString()] = 'person'
     idCounter ++;
     newTree = new Tree()
     newTree.addName(p)
@@ -265,6 +274,17 @@ function deletePerson(person) {
             }
         }
         delete personDict[person.id]
+        for (list of siblingList) {
+            for (i in list) {
+                if (list[i] === person.id) {
+                    list.splice(i, 1)
+                    break
+                }
+            }
+        }
+        for (i in siblingList) {
+            if (siblingList[i].length === 1) {list.splice(i, 1)}
+        }
     }
     recurseDelete(person)
     renderForm()
@@ -300,8 +320,8 @@ function hideButtons(id) {
 
 function renderForm() {
     if (rootTree.names.length === 0) {
-        p = new Person('[Enter Name]', idCounter);
-        personDict[idCounter] = p;
+        p = new Person('[Enter Name]', idCounter.toString());
+        personDict[idCounter.toString()] = p;
         idCounter ++;
         rootTree.addName(p)
     }
@@ -435,6 +455,7 @@ let treeList = [] // a list of all trees
 let databaseObjects = {}; // a list created of all models during getTree (so you know what to delete)
 let idCounter = 0;
 let treeIDCounter = 0;
+let siblingList = []
 
 function getTree(tree) {
     //transforms tree models into Tree objects
@@ -519,12 +540,13 @@ function save() {
     function writeModels(list) {
         function writeTree(tree) {
             let public = false
-            if (tree === rootTree) {public = true}
+            contributor = []
+            if (tree === rootTree) {public = true; contributor = siblingList}
             let newNames = [];
             for (i in tree.names) {
                 newNames.push(personIDMap[tree.names[i].id])
             }
-            post('/api/tree-saver', {'public': public, 'names': newNames}, function(newTree) {
+            post('/api/tree-saver', {'public': public, 'names': newNames, 'contributor_names': contributor}, function(newTree) {
                 list.splice(0,1)
                 treeIDMap[tree.id] = newTree._id
                 if (list.length !== 0) {
@@ -581,6 +603,7 @@ function deleteTree() {
 function main() {
     const treeId = window.location.search.substring(1);
     get('/api/tree', {'_id': treeId}, function(tree) {
+        siblingList = tree.contributor_names
         databaseObjects[tree._id] = 'tree'
         const title = document.getElementById('title-place')
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
