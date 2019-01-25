@@ -14,117 +14,6 @@ const Person = require('../models/person');
 
 const router = express.Router();
 
-class TreeClass {
-  constructor() {
-      this.names = [] // array of Person objects
-      this.id = treeIDCounter;
-      treeIDCounter ++;
-  }
-
-  addName(name) {
-      this.names.push(name)
-  }
-
-  removeName(name) {
-      for (i in this.names) {
-          if (this.names[i] === name) {
-              this.names.splice(i,1);
-              break;
-          }
-      }
-  }
-}
-
-class PersonClass {
-  constructor(_name, _id) {
-      this.name = _name;
-      this.id = _id
-      this.partner = null; // an ID of the person object
-      this.subtree = [] // array of tree objects - one for each parent (geneologically), should add their siblings into the tree
-      this.photos = []
-      this.videos = []
-      this.audios = []
-      this.texts = []
-  }
-
-  addSubtree(tree) {
-      this.subtree.push(tree)
-  }
-
-  removeSubtree(index) {
-      this.subtree.splice(index,1)
-  }
-
-  addPhoto(photo) {
-
-      if (!this.photos.includes(photo)) {
-          this.photos.push(photo)
-      }
-  }
-
-  removePhoto(photo) {
-      for (i in this.photos) {
-          if (this.photos[i] === photo) {
-              this.photos.splice(i,1)
-              break;
-          }
-      }
-  }
-
-  addVideo(video) {
-      if (!this.videos.includes(video)) {
-          this.videos.push(video)
-      }
-  }
-
-  removeVideo(video) {
-      for (i in this.videos) {
-          if (this.videos[i] === video) {
-              this.videos.splice(i,1)
-              break;
-          }
-      }
-  }
-
-  addAudio(audio) {
-      if (!this.audios.includes(audio)) {
-          this.audios.push(audio)
-      }
-  }
-
-  removeAudio(audio) {
-      for (i in this.audios) {
-          if (this.audios[i] === audio) {
-              this.audios.splice(i,1)
-              break;
-          }
-      }
-  }
-
-  addText(text) {
-      if (!this.texts.includes(text)) {
-          this.texts.push(text)
-      }
-  }
-
-  removeText(text) {
-      for (i in this.texts) {
-          if (this.texts[i] === text) {
-              this.texts.splice(i,1)
-              break;
-          }
-      }
-  }
-
-  hasParent() {
-      return this.subtree.length > 0; //if the Person has parents to be represented in the subtree
-  }
-
-  hasPartner() {
-      return !this.partner;
-  }
-}
-
 // api endpoints
 router.get('/whoami', function(req, res) {
   if(req.isAuthenticated()){
@@ -270,7 +159,7 @@ router.post('/tree-saver', connect.ensureLoggedIn(), function(req, res) {
   const newTree = new Tree({
     'creator_id': req.user._id,
     'creator_name': req.user.name,
-    'contributor_names': [],
+    'contributor_names': req.body.contributor_names,
     'names': req.body.names,
     'public': req.body.public
   });
