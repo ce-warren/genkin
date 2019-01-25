@@ -111,6 +111,11 @@ class Person {
 
 function renderPage() {
     const container = document.getElementById('main-container')
+    const loader = document.createElement('div')
+    loader.className = 'loader'
+    loader.id = 'loader-main'
+    container.appendChild(loader)
+
     const lowerDiv = document.createElement('div')
     lowerDiv.className = 'row'
 
@@ -157,8 +162,8 @@ function newGraph (graph) {
                 for (k of j.names) {
                     newTree.addName(k)
                 }
-            } 
-            newLevel.appendChild(newGraph(newTree))  
+            }
+            partnership.appendChild(newGraph(newTree))  
         }
         level.appendChild(newLevel);
 
@@ -214,6 +219,7 @@ function addPartner(person) {
 function addSibling(person) {
     p = new Person('[Enter Name]', idCounter);
     personDict[idCounter] = p;
+    databaseObjects[idCounter] = 'person'
     idCounter ++;
     for (tree of treeList) {
         if (tree.names.includes(person)) {
@@ -228,6 +234,7 @@ function addSibling(person) {
 function addParent(person) {
     p = new Person('[Enter Name]', idCounter);
     personDict[idCounter] = p;
+    databaseObjects[idCounter] = 'person'
     idCounter ++;
     newTree = new Tree()
     newTree.addName(p)
@@ -342,6 +349,7 @@ function renderForm() {
                 inputBox.id = 'input-box-' + person.id
                 personDiv.appendChild(inputBox)
                 personDiv.appendChild(document.createElement('br'))
+                inputBox.addEventListener('click', function() {inputBox.value = ''})
 
                 const nameButton = document.createElement('button')
                 nameButton.className = 'name-button'
@@ -564,12 +572,6 @@ function deleteTree() {
     }
 }
 
-function renderStuff() {
-    // remove when you figure out how to render in proper order
-    document.getElementById('start-nav-button').style.display = 'none'
-    renderForm()
-}
-
 function main() {
     const treeId = window.location.search.substring(1);
     get('/api/tree', {'_id': treeId}, function(tree) {
@@ -578,7 +580,6 @@ function main() {
         title.innerHTML = 'Tree Builder | ' + tree.creator_name
         renderPage()
         rootTree = getTree(tree)
-        document.getElementById('start-nav-button').addEventListener('click', renderStuff)
         document.getElementById('save-nav-button').addEventListener('click', save)
         document.getElementById('delete-nav-button').addEventListener('click', deleteTree)
         document.getElementById('ar-nav-button').addEventListener('click', function() {
@@ -587,6 +588,13 @@ function main() {
         document.getElementById('vr-nav-button').addEventListener('click', function() {
             window.location.assign('/tree-vr?' + window.location.search.substring(1))
         })
+        setTimeout(function(){
+            document.getElementById('main-container').removeChild(document.getElementById('loader-main'))
+            renderForm();
+            let count = 0
+            for (thing in databaseObjects) {count ++;}
+            lenDatabase = count
+        }, 1000);
     });
 };
 
