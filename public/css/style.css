@@ -61,3 +61,8 @@ body {
 h1 {
   padding: 10px
 }
+
+p {
+  font-size: 17px;
+  margin-bottom: 1.5rem
+}
