@@ -161,12 +161,32 @@ function newGraph (graph) {
         else {
             partnership.innerHTML = '<a href="#">' + i.name + '</a><a href="#">' + personDict[i.partner].name + '</a>'
         }*/
+        sib = false; //Boolean to check if the person has siblings
+        for (m of siblingList) {
+            //checks if this person has siblings
+            if m.includes(i.id) {
+                sib = true;
+                let these_siblings = m; //list of the current person's siblings
+                these_siblings.splice(these_siblings.indexOf(i.id), 1); //removing the current person's ID
+            }
+        }
         if (i.subtree.length > 0) {
             //recursively creates a new list
             let newTree = new Tree();
             for (j of i.subtree) {
-                for (k of j.names) {
-                    newTree.addName(k)
+                for (k of j.names) { //each k is a person object
+                    //isolate siblings here
+                    if (sib) {
+                        if (these_siblings.includes(k.id)) {
+                            //special HTML for the sibling to be included
+                        }
+                        else {
+                            newTree.addName(k);
+                        }
+                    }
+                    else {
+                        newTree.addName(k);
+                    }
                 }
             }
             partnership.appendChild(newGraph(newTree))  
