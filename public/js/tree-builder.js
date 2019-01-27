@@ -150,10 +150,16 @@ function newGraph (graph) {
     const level = document.createElement('ul');
     for (i of graph.names) {
         const newLevel = document.createElement('li');
+<<<<<<< HEAD
         const link = document.createElement('a');
         link.innerText = i.name;
         link.href = "#";
         newLevel.appendChild(link);
+=======
+        const partnership = document.createElement('div');
+        partnership.className = 'partners';
+        partnership.innerHTML = '<a>' + i.name + '</a>'
+>>>>>>> 28bf0f9357646709f115d05d4b3dbad922d69d6b
         // might need below code, depending on how partner graphing is implemented
         /* if (i.partner === null || i.partner === undefined) {
             partnership.innerHTML = '<a href="#">' + i.name + '</a>'
