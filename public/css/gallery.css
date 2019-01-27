@@ -18,6 +18,11 @@
     box-shadow: 1px 1px 2px #666;
 }
 
+.card-button-gallery {
+    margin-left: 5rem;
+    margin-right: 5rem;
+}
+
 .card-button:hover {
     cursor: pointer;
 }
@@ -29,4 +34,8 @@ a {
 a:hover {
     color: #212529;
     text-decoration: none;
+}
+
+p {
+    margin-top: 5rem;
 }

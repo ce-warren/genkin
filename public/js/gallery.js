@@ -64,7 +64,15 @@ function treeDOMObject(treeJSON) {
   buttonDiv.className = 'tree-button-div row mt-4'
   cardBody.appendChild(buttonDiv)
 
-  const renderARButtonDiv = document.createElement('div')
+  const renderButtonDiv = document.createElement('div')
+  renderButtonDiv.className = 'col-12'
+  const renderButton = document.createElement('div')
+  renderButton.className = 'card-button card-button-gallery'
+  renderButton.innerHTML = '<a href="/visual?' + treeJSON._id + '">Show Tree</a>'
+  renderButtonDiv.appendChild(renderButton)
+  buttonDiv.appendChild(renderButtonDiv)
+
+  /* const renderARButtonDiv = document.createElement('div')
   renderARButtonDiv.className = 'col-6'
   const renderARButton = document.createElement('div')
   renderARButton.className = 'card-button'
@@ -78,7 +86,7 @@ function treeDOMObject(treeJSON) {
   renderVRButton.className = 'card-button'
   renderVRButton.innerHTML = '<a href="/tree-vr?' + treeJSON._id + '">VR</a>'
   renderVRButtonDiv.appendChild(renderVRButton)
-  buttonDiv.appendChild(renderVRButtonDiv)
+  buttonDiv.appendChild(renderVRButtonDiv) */ 
 
   return card;
 }
