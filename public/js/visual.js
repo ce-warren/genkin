@@ -116,6 +116,8 @@ let databaseObjects = {}; // a list created of all models during getTree (so you
 let idCounter = 0;
 let treeIDCounter = 0;
 let siblingList = []
+let mediaDict = {} // dictionary structure: entry for each person; each entry is a dict with keys photos, videos, audios, texts,
+    // each a list containing html elements
 
 function getTree(tree) {
     //transforms tree models into Tree objects
@@ -160,7 +162,8 @@ function newGraph (graph) {
         const newLevel = document.createElement('li');
         const partnership = document.createElement('div');
         partnership.className = 'partners';
-        partnership.innerHTML = '<a href="#">' + i.name + '</a>'
+        partnership.innerHTML = '<a href="#" id="' + i.id + '">' + i.name + '</a>'
+        partnership.addEventListener('click', function() {getMedia(partnership.id)})
         // might need below code, depending on how partner graphing is implemented
         /* if (i.partner === null || i.partner === undefined) {
             partnership.innerHTML = '<a href="#">' + i.name + '</a>'
@@ -182,6 +185,68 @@ function newGraph (graph) {
         level.appendChild(newLevel);
     }
     return level;
+}
+
+function loadMedia (id) {
+    mediaDict[id] = {
+        'photos': [],
+        'videos': [],
+        'audios': [],
+        'texts': []
+    }
+
+    for (photoID of personDict[id].photos) {
+        get('/api/image', {'_id': photoID}, function(image) {
+            const imageHolder = document.createElement('img')
+            imageHolder.src = 'data:image;base64,' + btoa(image.data)
+            imageHolder.setAttribute('class','photo-holder media-holder')
+            mediaDict[id]['photos'].push(imageHolder)
+        })
+    }
+
+    for (videoID of personDict[id].videos) {
+        get('/api/video', {'_id': videoID}, function(video) {
+            const videoHolder = document.createElement('video')
+            videoHolder.setAttribute('controls', '')
+            const videoSource = document.createElement('source')
+            videoSource.src = 'data:video;base64,' + btoa(video.data)
+            videoSource.type = video.type
+            videoHolder.appendChild(videoSource)
+            videoHolder.setAttribute('class','video-holder media-holder')
+            mediaDict[id]['videos'].push(videoHolder)
+        })
+    }
+
+    for (audioID of personDict[id].audios) {
+        get('/api/audio', {'_id': audioID}, function(audio) {
+            const audioHolder = document.createElement('audio')
+            audioHolder.setAttribute('controls', '')
+            const audioSource = document.createElement('source')
+            audioSource.src = 'data:audio;base64,' + btoa(audio.data)
+            audioSource.type = audio.type
+            audioHolder.appendChild(audioSource)
+            audioHolder.setAttribute('class','audio-holder media-holder')
+            mediaDict[id]['audios'].push(audioHolder)
+        })
+    }
+
+    for (textID of personDict[id].texts) {
+        get('/api/text', {'_id': textID}, function(text) {
+            const textHolder = document.createElement('div')
+            pList = text.data.split(/(\r\n|\n|\r)/gm)
+            for (i of pList) {
+                const textP = document.createElement('p')
+                textP.innerHTML = i
+                textHolder.appendChild(textP)
+            }
+            textHolder.setAttribute('class','text-holder media-holder')
+            mediaDict[id]['texts'].push(textHolder)
+        })
+    }
+}
+
+function getMedia (id) {
+    // render all media on page when person's name is clicked
 }
 
 function main() {
@@ -212,7 +277,13 @@ function main() {
                 let count = 0
                 for (thing in databaseObjects) {count ++;}
                 lenDatabase = count
+                setTimeout (function() {
+                    for (person in personDict) {
+                        loadMedia(person)
+                    }
+                }, 1000)
             }, 1000);
+
         });
     });
 };
