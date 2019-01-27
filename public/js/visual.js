@@ -163,6 +163,7 @@ function newGraph (graph) {
         const partnership = document.createElement('div');
         partnership.className = 'partners';
         partnership.innerHTML = '<a class="tree-name-box" id="' + i.id + '">' + i.name + '</a>'
+        partnership.id = i.id
         partnership.addEventListener('click', function() {getMedia(partnership.id)})
         // might need below code, depending on how partner graphing is implemented
         /* if (i.partner === null || i.partner === undefined) {
