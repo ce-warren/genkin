@@ -146,7 +146,7 @@ function newGraph (graph) {
         const newLevel = document.createElement('li');
         const partnership = document.createElement('div');
         partnership.className = 'partners';
-        partnership.innerHTML = '<a href="#">' + i.name + '</a>'
+        partnership.innerHTML = '<a>' + i.name + '</a>'
         // might need below code, depending on how partner graphing is implemented
         /* if (i.partner === null || i.partner === undefined) {
             partnership.innerHTML = '<a href="#">' + i.name + '</a>'

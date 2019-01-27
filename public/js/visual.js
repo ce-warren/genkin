@@ -162,7 +162,7 @@ function newGraph (graph) {
         const newLevel = document.createElement('li');
         const partnership = document.createElement('div');
         partnership.className = 'partners';
-        partnership.innerHTML = '<a href="#" id="' + i.id + '">' + i.name + '</a>'
+        partnership.innerHTML = '<a class="tree-name-box" id="' + i.id + '">' + i.name + '</a>'
         partnership.addEventListener('click', function() {getMedia(partnership.id)})
         // might need below code, depending on how partner graphing is implemented
         /* if (i.partner === null || i.partner === undefined) {
@@ -260,19 +260,12 @@ function main() {
             heading.id = 'user-name'
             headingDiv.appendChild(heading);
 
-            const container = document.getElementById('main-container')
-            const loader = document.createElement('div')
-            loader.className = 'loader'
-            loader.id = 'loader-main'
-            container.prepend(loader)
-
             siblingList = tree.contributor_names
             const title = document.getElementById('title-place')
             title.innerHTML = 'Tree Builder | ' + tree.creator_name
             
             rootTree = getTree(tree)
             setTimeout(function(){
-                document.getElementById('main-container').removeChild(document.getElementById('loader-main'))
                 renderGraph(rootTree);
                 let count = 0
                 for (thing in databaseObjects) {count ++;}

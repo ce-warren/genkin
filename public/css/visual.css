@@ -15,7 +15,23 @@
     100% { transform: rotate(360deg); }
 }
 
-.about-data {
-    height: 600px;
-    overflow:scroll
+#main-container {
+    background-image: url(../images/visual_background.jpeg);
+    /* image: http://casemountaintreeservice.com/why-experience-matters-in-choosing-the-right-tree-service/ */
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    opacity: .8;
+    background-attachment: scroll;
+    min-height: 400px;
+    margin: 1rem;
+}
+
+.tree-name-box {
+    background: #eee;
+    border-color: #eee!important
+}
+
+#tree {
+    margin-bottom: 0!important;
 }
