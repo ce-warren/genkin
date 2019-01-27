@@ -162,9 +162,13 @@ function newGraph (graph) {
         const newLevel = document.createElement('li');
         const partnership = document.createElement('div');
         partnership.className = 'partners';
-        partnership.innerHTML = '<a class="tree-name-box" id="' + i.id + '">' + i.name + '</a>'
-        partnership.id = i.id
-        partnership.addEventListener('click', function() {getMedia(partnership.id)})
+        //partnership.innerHTML = '<a class="tree-name-box" id="' + i.id + '">' + i.name + '</a>'
+        const partnershipLink = document.createElement('a')
+        partnershipLink.className = 'tree-name-box'
+        partnershipLink.id = i.id
+        partnershipLink.innerHTML = i.name
+        partnershipLink.addEventListener('click', function() {getMedia(partnershipLink.id)})
+        partnership.appendChild(partnershipLink)
         // might need below code, depending on how partner graphing is implemented
         /* if (i.partner === null || i.partner === undefined) {
             partnership.innerHTML = '<a href="#">' + i.name + '</a>'
@@ -249,11 +253,12 @@ function loadMedia (id) {
 function getMedia (id) {
     // render all media on page when person's name is clicked
     //value is the JSON object with media object keys 
-    console.log(name);
-    console.log(value);
+    const value = mediaDict[id];
+    const name = personDict[id].name;
     //Populating the modal
     const header = document.createElement('h2');
     header.innerText = name;
+    header.id = "head"
     document.getElementById("modal-header").appendChild(header);
 
 
@@ -263,7 +268,7 @@ function getMedia (id) {
         const title = document.createElement('h3');
         section.innerText = key.toUpperCase() + ":";
         section.appendChild(title);
-        for (i of value) {
+        for (i of value[key]) {
             section.appendChild(i); //appends all the HTML tags to the page
         }
         document.getElementById('modal-body').appendChild(section); //completes the modal block
@@ -271,18 +276,12 @@ function getMedia (id) {
     // Get the modal
     const modal = document.getElementById('myModal');
 
-    // Get the <span> element that closes the modal
-    const span = document.getElementById("close");
-
-    // When the user clicks on <span> (x), close the modal
-    span.addEventListener("click", function (){
-        modal.style.display = "none";
-    })
-    
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
+            document.getElementById('modal-header').innerHTML = '';
+            document.getElementById('modal-body').innerHTML = '';
         }
     }
     modal.style.display = "block";
@@ -330,4 +329,3 @@ function main() {
 };
 
 main();
-document.addEventListener("click", getMedia); 
