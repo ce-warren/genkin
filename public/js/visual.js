@@ -247,7 +247,54 @@ function loadMedia (id) {
 
 function getMedia (id) {
     // render all media on page when person's name is clicked
+    //value is the JSON object with media object keys 
+    console.log(name);
+    console.log(value);
+    //Populating the modal
+    const header = document.createElement('h2');
+    header.innerText = name;
+    document.getElementById("modal-header").appendChild(header);
+
+
+    for (key in value) {
+        const section = document.createElement('div');
+        section.className = key;
+        const title = document.createElement('h3');
+        section.innerText = key.toUpperCase() + ":";
+        section.appendChild(title);
+        for (i of value) {
+            section.appendChild(i); //appends all the HTML tags to the page
+        }
+        document.getElementById('modal-body').appendChild(section); //completes the modal block
+    }
+    // Get the modal
+    const modal = document.getElementById('myModal');
+
+    // Get the <span> element that closes the modal
+    const span = document.getElementById("close");
+
+    // When the user clicks on <span> (x), close the modal
+    span.addEventListener("click", function (){
+        modal.style.display = "none";
+    })
+    
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    modal.style.display = "block";
+    
 }
+
+// getEntry = (event) => {
+//     let clicked = event.target.id;
+//     console.log(clicked);
+//     if (mediaDict.hasOwnProperty(clicked)) {
+//         getMedia(mediaDict[clicked], personDict[clicked].name) //calls get media with the media objects for the ID clicked
+//     };
+// }
 
 function main() {
     const treeId = window.location.search.substring(1);
@@ -289,3 +336,4 @@ function main() {
 };
 
 main();
+document.addEventListener("click", getMedia); 
