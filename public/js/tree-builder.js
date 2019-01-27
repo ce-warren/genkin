@@ -615,11 +615,14 @@ function main() {
         rootTree = getTree(tree)
         document.getElementById('save-nav-button').addEventListener('click', save)
         document.getElementById('delete-nav-button').addEventListener('click', deleteTree)
-        document.getElementById('ar-nav-button').addEventListener('click', function() {
+        /* document.getElementById('ar-nav-button').addEventListener('click', function() {
             window.location.assign('/tree-ar?' + window.location.search.substring(1))
         })
         document.getElementById('vr-nav-button').addEventListener('click', function() {
             window.location.assign('/tree-vr?' + window.location.search.substring(1))
+        }) */
+        document.getElementById('visual-nav-button').addEventListener('click', function() {
+            window.location.assign('/visual?' + window.location.search.substring(1))
         })
         setTimeout(function(){
             document.getElementById('main-container').removeChild(document.getElementById('loader-main'))
