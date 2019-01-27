@@ -164,7 +164,7 @@ function newGraph (graph) {
         sib = false; //Boolean to check if the person has siblings
         for (m of siblingList) {
             //checks if this person has siblings
-            if m.includes(i.id) {
+            if (m.includes(i.id)) {
                 sib = true;
                 let these_siblings = m; //list of the current person's siblings
                 these_siblings.splice(these_siblings.indexOf(i.id), 1); //removing the current person's ID
@@ -179,6 +179,7 @@ function newGraph (graph) {
                     if (sib) {
                         if (these_siblings.includes(k.id)) {
                             //special HTML for the sibling to be included
+                            console.log("Siblings exist")
                         }
                         else {
                             newTree.addName(k);
