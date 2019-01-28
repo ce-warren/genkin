@@ -262,12 +262,12 @@ function getMedia (id) {
     document.getElementById("modal-header").appendChild(header);
 
 
-    for (key in value) {
+    for (key in value) { // keys = photos, videos, audios, texts
         const section = document.createElement('div');
-        section.className = key;
-        const title = document.createElement('h3');
-        section.innerText = key.toUpperCase() + ":";
-        section.appendChild(title);
+        section.className = key + '-holder media-container';
+        // const title = document.createElement('h3');
+        // section.innerText = key.toUpperCase() + ':';
+        // section.appendChild(title);
         for (i of value[key]) {
             section.appendChild(i); //appends all the HTML tags to the page
         }
@@ -290,7 +290,6 @@ function getMedia (id) {
 
 // getEntry = (event) => {
 //     let clicked = event.target.id;
-//     console.log(clicked);
 //     if (mediaDict.hasOwnProperty(clicked)) {
 //         getMedia(mediaDict[clicked], personDict[clicked].name) //calls get media with the media objects for the ID clicked
 //     };

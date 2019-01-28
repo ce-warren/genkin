@@ -605,7 +605,7 @@ function save() {
             for (i in person.subtree) {
                 newSubtree.push(treeIDMap[person.subtree[i].id])
             }  
-            post('/api/person-saver', {'name': person.name,'subtree': newSubtree, 'photos': person.photos, 'videos': person.photos, 'audios': person.audios, 'texts':person.texts}, function(newPerson) {
+            post('/api/person-saver', {'name': person.name,'subtree': newSubtree, 'photos': person.photos, 'videos': person.videos, 'audios': person.audios, 'texts':person.texts}, function(newPerson) {
                 list.splice(0,1)
                 personIDMap[person.id] = newPerson._id
                 if (list[0] instanceof Tree) {writeTree(list[0])}
