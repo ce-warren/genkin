@@ -82,7 +82,6 @@ function uploadVideo() {
         fileReader.onload = function() {
             const binData = fileReader.result
             post('/api/video', {content:binData, type:dataType}, function(video) {
-                console.log(video)
                 showVideos()
             });
         }  

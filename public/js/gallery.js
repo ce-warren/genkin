@@ -40,8 +40,6 @@ function load() {
   if (!finished) {
     renderTreeCards(start);
   }
-
-  console.log(finished)
 };
 
 function treeDOMObject(treeJSON) {
@@ -93,7 +91,6 @@ function treeDOMObject(treeJSON) {
 
 function renderTreeCards(start) {
   const treesDiv = document.getElementById('trees-container');
-  console.log(start)
   get('/api/public-trees', {'public': true, 'to_skip': start}, function(treesArr) {
       for (let i = 0; i < treesArr.length; i++) {
           const currentTree = treesArr[i];

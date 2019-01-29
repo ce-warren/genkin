@@ -178,7 +178,6 @@ function newGraph (graph) {
                     if (sib) {
                         if (these_siblings.includes(k.id)) {
                             //special HTML for the sibling to be included
-                            console.log("Siblings exist")
                         }
                         else {
                             newTree.addName(k);
